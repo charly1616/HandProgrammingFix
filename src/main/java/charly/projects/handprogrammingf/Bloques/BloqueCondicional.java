@@ -1,5 +1,5 @@
 
-package Bloques;
+package charly.projects.handprogrammingf.Bloques;
 
 import Model.ConectorMultiple;
 import Model.EvaluadorExpresiones;

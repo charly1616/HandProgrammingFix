@@ -1,5 +1,5 @@
 
-package Bloques;
+package charly.projects.handprogrammingf.Bloques;
 
 import Model.Bloque;
 import java.util.ArrayList;
