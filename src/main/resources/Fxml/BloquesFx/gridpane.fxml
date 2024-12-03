@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="GridView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="771.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Model.GridController">
+   <children>
+      <Pane fx:id="Grid" layoutX="-1.0" layoutY="-3.0" prefHeight="777.0" prefWidth="1050.0" />
+   </children>
+</Pane>
