@@ -1,4 +1,4 @@
-package charly.projects.handprogrammingf.Main;
+package charly.projects.handprogrammingf;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
