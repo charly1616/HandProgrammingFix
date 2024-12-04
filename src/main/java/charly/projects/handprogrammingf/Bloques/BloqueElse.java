@@ -1,6 +1,7 @@
 
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Model.Bloque;
 import javafx.scene.paint.Color;
 
 /**
@@ -20,15 +21,26 @@ public class BloqueElse extends BloqueCondicional{
     Si no cumple con esa condición, el método no realiza ninguna acción.
     */
     @Override
-    public void Hacer(){
+    public void Hacer() {
+
         this.LineaEjecutador();
-        if (conectadov.conectador instanceof BloqueElif || conectadov.conectador instanceof BloqueIF){
+
+        if (conectadov.conectador instanceof BloqueElif || conectadov.conectador instanceof BloqueIF) {
             super.Hacer();
         } else {
             this.ponerRojo(this);
-            SiguienteLinea().ejecutador = ejecutador;
+            return;
         }
-            SiguienteLinea().Hacer();
+
+        Bloque siguiente = SiguienteLinea();
+        if (siguiente != null && siguiente != this) {
+            siguiente.ejecutador = ejecutador;
+            siguiente.Hacer();
+        } else {
+            System.out.println("El siguiente bloque es nulo o igual al bloque actual.");
+        }
     }
-    
+
+
+
 }

@@ -81,15 +81,14 @@ public class BloqueCondicional extends BloqueEjecutable{
         setAncho(textWidth + 62);
         label.setVisible(true);
     }
-    
-    
-    //Evalua el bloque que le sigue
+
     public boolean evaluarSiguiente(){
         return EvaluadorExpresiones.EvCondicion(Siguiente());
     }
-    
-    
-    
-    
-    
+
+
+
+
+
+
 }
