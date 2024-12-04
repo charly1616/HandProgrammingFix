@@ -27,7 +27,8 @@ public class BloqueIF extends BloqueCondicional {
             if (SiguienteLinea() != null) {
                 SiguienteLinea().ejecutador = ejecutador;
                 SiguienteLinea().Hacer();
-                
+            }else{
+                return;
             }
         } else if (evaluarSiguiente()) {
             super.Hacer();
