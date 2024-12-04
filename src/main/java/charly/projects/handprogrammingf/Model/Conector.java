@@ -1,9 +1,9 @@
 
 package charly.projects.handprogrammingf.Model;
 
-import Bloques.BloqueInicio;
-import Bloques.BloqueOP;
-import Bloques.BloqueValor;
+import charly.projects.handprogrammingf.Bloques.BloqueInicio;
+import charly.projects.handprogrammingf.Bloques.BloqueOP;
+import charly.projects.handprogrammingf.Bloques.BloqueValor;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

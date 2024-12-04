@@ -1,8 +1,8 @@
 
 package charly.projects.handprogrammingf.Bloques;
 
-import Model.ConectorMultiple;
-import Model.EvaluadorExpresiones;
+import charly.projects.handprogrammingf.Model.ConectorMultiple;
+import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;

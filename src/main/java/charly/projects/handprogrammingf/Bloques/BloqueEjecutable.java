@@ -1,7 +1,7 @@
 
 package charly.projects.handprogrammingf.Bloques;
 
-import Model.Bloque;
+import charly.projects.handprogrammingf.Model.Bloque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

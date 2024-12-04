@@ -14,6 +14,12 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+import java.util.Objects;
+
 public class Main extends Application {
     
     
@@ -36,7 +42,8 @@ public class Main extends Application {
         primaryStage.setScene(loadingScene);
 
         // Cargar la imagen de fondo
-        Image backgroundImage = new Image("2.jpg");
+        System.out.println(getClass().getResource("/Fxml/VentanasFx/ventana.fxml") + "IMAGEN");
+        Image backgroundImage = new Image("/Images/2.jpg");
         ImageView backgroundImageView = new ImageView(backgroundImage);
         rootPane.getChildren().add(backgroundImageView);
         
@@ -48,7 +55,7 @@ public class Main extends Application {
                 }),
                 new KeyFrame(Duration.seconds(3), event -> {
                     try {
-                        Parent mainRoot = FXMLLoader.load(getClass().getResource("ventana.fxml"));
+                        Parent mainRoot = FXMLLoader.load(getClass().getResource("/Fxml/VentanasFx/ventana.fxml"));
                         Scene mainScene = new Scene(mainRoot);
                         primaryStage.setScene(mainScene);
                         primaryStage.setTitle("PROYECTO SISTEMAS");

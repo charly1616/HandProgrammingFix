@@ -1,7 +1,7 @@
 
 package charly.projects.handprogrammingf.Model;
 
-import Bloques.*;
+import charly.projects.handprogrammingf.Bloques.*;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

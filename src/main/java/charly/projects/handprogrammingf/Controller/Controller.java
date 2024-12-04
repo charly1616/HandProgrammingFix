@@ -28,7 +28,7 @@ public class Controller implements Initializable {
     public void crearCuadricula() {
         try {
             FXMLLoader f = new FXMLLoader();
-            f.setLocation(getClass().getResource("gridpane.fxml"));
+            f.setLocation(getClass().getResource("/Fxml/VentanasFx/gridpane.fxml"));
             Pane p = f.load();
             //GridController Bcon = f.getController();
             ventana.setCenter(p);

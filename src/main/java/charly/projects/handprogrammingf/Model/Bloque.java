@@ -1,8 +1,8 @@
 
 package charly.projects.handprogrammingf.Model;
 
-import Bloques.BloqueEjecutable;
-import Bloques.BloqueInicio;
+import charly.projects.handprogrammingf.Bloques.BloqueEjecutable;
+import charly.projects.handprogrammingf.Bloques.BloqueInicio;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;

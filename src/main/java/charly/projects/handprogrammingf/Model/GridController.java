@@ -1,19 +1,12 @@
 package charly.projects.handprogrammingf.Model;
 
 import charly.projects.handprogrammingf.Bloques.BloqueInicio;
-import charly.projects.handprogrammingf.Bloques.*;
-import javafx.scene.Node;
-import charly.projects.handprogrammingf.Controller.Controller;
-import charly.projects.handprogrammingf.Model.Bloque;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
@@ -22,27 +15,19 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
-import javafx.geometry.Pos;
-import javafx.stage.Stage;
 
 /**
  *
@@ -605,7 +590,8 @@ public class GridController implements Initializable {
             // Elimina el conector vertical y lo quita de la lista
             Grid.getChildren().remove(bloque.cvertical);
         }
-        if (bloque.cvertical.inner != null) {
+
+        if (bloque.cvertical != null && bloque.cvertical.inner != null) {
             // Elimina el conector interno y lo quita de la lista
             Grid.getChildren().remove(bloque.cvertical.inner);
         }
@@ -618,31 +604,31 @@ public class GridController implements Initializable {
     
     
     
-    private void ActivarCamara(){
-        try {
-            String scriptPath = "src/Main/PythonCode.py";
-
-            //String[] command = {"C:/Users/juand/AppData/Local/Microsoft/WindowsApps/python.exe", scriptPath};   //Juanda
-            String[] command = {"C:/Users/User/AppData/Local/Programs/Python/Python311/python.exe", scriptPath};   //Charly
-            
-            
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            camara = processBuilder.start();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void ActivarCamara(){
+//        try {
+//            String scriptPath = "src/Main/PythonCode.py";
+//
+//            //String[] command = {"C:/Users/juand/AppData/Local/Microsoft/WindowsApps/python.exe", scriptPath};   //Juanda
+//            String[] command = {"C:/Users/User/AppData/Local/Programs/Python/Python311/python.exe", scriptPath};   //Charly
+//
+//
+//            ProcessBuilder processBuilder = new ProcessBuilder(command);
+//            camara = processBuilder.start();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     
     
-    private void DesactivarCamara(){
-        try {
-            camara.destroy();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
+//    private void DesactivarCamara(){
+//        try {
+//            camara.destroy();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
 
 }

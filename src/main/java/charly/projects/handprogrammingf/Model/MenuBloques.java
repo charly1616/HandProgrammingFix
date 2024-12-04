@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.util.Objects;
+
 
 public class MenuBloques extends VBox{
     
@@ -35,11 +37,11 @@ public class MenuBloques extends VBox{
         setStyle("-fx-background-color: #E7E7E7;");
 
         // Botón 1
-        Button button1 = createButton("/src/Images/Open 0Box.png", "#FFA917");
+        Button button1 = createButton(Objects.requireNonNull(getClass().getResource("/Images/Buttons/Box.png")).getPath(), "#FFA917");
         getChildren().add(button1);
 
         // Botón 2
-        Button button2 = createButton("@../../AppData/Local/Temp/Icons8/Pichon/Multiply.png", "#817590");
+        Button button2 = createButton(Objects.requireNonNull(getClass().getResource("/Images/Math/Multiply.png")).getPath(), "#817590");
         getChildren().add(button2);
 
         // Separador
@@ -49,11 +51,11 @@ public class MenuBloques extends VBox{
 
 
         // Botón 3
-        Button button3 = createButton("@../../AppData/Local/Temp/Icons8/Pichon/Repeat_2.png", "#A77CE0");
+        Button button3 = createButton(getClass().getResource("/Images/Ejecutable/Repeat_1.png").getPath(), "#A77CE0");
         getChildren().add(button3);
 
         // Botón 4
-        Button button4 = createButton("@../../AppData/Local/Temp/Icons8/Pichon/Share_1.png", "#88DBFF");
+        Button button4 = createButton(getClass().getResource("/Images/Ejecutable/Share_1.png").getPath(), "#88DBFF");
         getChildren().add(button4);
 
         // Separador
@@ -62,14 +64,14 @@ public class MenuBloques extends VBox{
         getChildren().add(separator3);
 
         // Botón 5
-        Button button5 = createButton("@../../AppData/Local/Temp/Icons8/Pichon/Export.png", "#FF6D87");
+        Button button5 = createButton(getClass().getResource("/Images/Buttons/Export.png").getPath(), "#FF6D87");
         getChildren().add(button5);
         button5.setOnAction(e -> {
             crearMostrar();
         });
 
         // Botón 6
-        Button button6 = createButton("@../../AppData/Local/Temp/Icons8/Pichon/Input.png", "#7EAA00");
+        Button button6 = createButton(getClass().getResource("/Images/Buttons/Input.png").getPath(), "#7EAA00");
         getChildren().add(button6);
         button6.setOnAction(e -> {
             System.out.println("Pediurrrrr");
@@ -106,7 +108,7 @@ public class MenuBloques extends VBox{
             i.setFitWidth(25);
             button.setGraphic(i);
         } catch (Exception e) {
-            System.out.println("Error al cargar imagen uwu");
+            System.out.println("Error al cargar imagen");
         }
         
         button.setGraphicTextGap(2.0);
