@@ -3,6 +3,9 @@ package charly.projects.handprogrammingf.Model;
 
 import charly.projects.handprogrammingf.Bloques.*;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class EvaluadorExpresiones {
     
     
@@ -10,49 +13,57 @@ public class EvaluadorExpresiones {
         if (inicial == null) return false;
         
         boolean deb = true;
-        if (!(InstBloqueValor(inicial))) {
+        if (!(InstBloqueValor(inicial))){
             inicial.ponerRojo(inicial);
             return false;
         }
-        
-        String lvalue = "";
-        
+
         Bloque Actual = inicial;
-        while (Actual != null){
-            //Se obtiene el valor
-            lvalue = BloqueValor.GetType(Actual.getValor());
-            
-            //Si no hay mas bloques o el siguiente bloque es otro valor, termina ahí
-            if (Actual.Siguiente() == null) break;
-            
-            if ((lvalue.equals("Str"))){
-                deb = deb && Debug(Actual.Siguiente());
-                break;
-            }
-            
-            if (InstBloqueValor(Actual.Siguiente()) && (BloqueValor.GetType(Actual.Siguiente().getValor()).equals("Str"))){
-                deb = deb && Debug(Actual.Siguiente());
-                break;
-            }
-            
-            //Si el bloque que está conectado al anterior no es Operacion concatena
-            if (!(Actual.Siguiente() instanceof BloqueOP) && InstBloqueValor(Actual.Siguiente())){
-                deb = deb && Debug(Actual.Siguiente());
-                break;
-            } else if (!(Actual.Siguiente() instanceof BloqueOP)){
-                break;
-            }
-            
-            
-            Actual = Actual.Siguiente().Siguiente();
-            //Si el bloque actual, osea el que se acaba de conectar no tiene valor, error
-            if (!(InstBloqueValor(Actual))) {
-                inicial.ponerRojo(inicial);
+        Bloque Last = inicial;
+
+        String last = "";
+
+
+        do {
+            if (Actual instanceof BloqueOP && Actual.Siguiente() == null){
+                System.out.println("ERROR DE EXPRESION: Operación al final");
+                Actual.ponerRojo(Actual);
                 return false;
             }
-        }
-        
-        if (!deb) inicial.ponerRojo(inicial);
+
+
+            String value = Actual.getValor();
+
+            if (BloqueOP.isMathOperation(Actual) && !(last).matches("^-?(\\d+(\\.\\d*)?|\\.\\d+)$")){
+                System.out.println("ERROR DE EXPRESIÓN: Operación matematica con valor diferente de numero: " + last + " No es un numero");
+                Actual.ponerRojo(Actual);
+                return false;
+            }
+
+            if (InstBloqueValor(Actual)){ last += value; }
+
+            if (Actual instanceof BloqueOP && InstBloqueValor(Last)){
+                last = "";
+            }
+
+
+            if (Actual instanceof BloqueOP && Last instanceof BloqueOP){
+                System.out.println("ERROR DE EXPRESION: Dos operaciones juntas");
+                Actual.ponerRojo(Actual);
+                return false;
+            }
+
+            if (!MatExpresion(last) && Last instanceof BloqueOP){
+                System.out.println("ERROR DE EXPRESION: Operación matematica junto valor diferente de numero: " + last + " No es un numero");
+                Actual.ponerRojo(Actual);
+                return false;
+            }
+
+
+            Last = Actual;
+            Actual = Actual.Siguiente();
+        } while (Actual != null);
+
         return deb;
     }
     
@@ -67,46 +78,45 @@ public class EvaluadorExpresiones {
         if (!(InstBloqueValor(inicial))) return "";
         
         Bloque Actual = inicial;
-        String lconexion = "";
-        String lvalue = "";
-        String exA = "";
-        String other = "";
+        Bloque Last = inicial;
+
+        String track = "";
+        String last = "";
+
         
-        while (Actual != null){
-            //Se obtiene el valor
-            exA += Actual.getValor();
-            if (Actual instanceof BloqueVariable) {System.out.println("Valor es: " + exA);}
-            lvalue = BloqueValor.GetType(Actual.getValor());
-            
-            //Si no hay mas bloques o el siguiente bloque es otro valor, termina ahí
-            if (Actual.Siguiente() == null) break;
-            
-            if ((lvalue.equals("Str"))){
-                other += Expresion(Actual.Siguiente());
-                break;
+        do {
+            if (Actual instanceof BloqueOP && Actual.Siguiente() == null) return "";
+
+
+            String value = Actual.getValor();
+
+            if (BloqueOP.isMathOperation(Actual) && !(last).matches("^-?(\\d+(\\.\\d*)?|\\.\\d+)$")) return "";
+
+
+            if (InstBloqueValor(Actual)){ last += value; }
+
+            if (Actual instanceof BloqueOP && InstBloqueValor(Last)){
+                track += last + Actual.getValor();
+                last = "";
             }
-            
-            if (InstBloqueValor(Actual.Siguiente()) && (BloqueValor.GetType(Actual.Siguiente().getValor()).equals("Str"))){
-                other += Expresion(Actual.Siguiente());
-                break;
-            }
-            
-            //Si el bloque que está conectado al anterior no es Operacion concatena
-            if (!(Actual.Siguiente() instanceof BloqueOP) && InstBloqueValor(Actual.Siguiente())){
-                other += Expresion(Actual.Siguiente());
-                break;
-            } else if (!(Actual.Siguiente() instanceof BloqueOP)){
-                break;
-            }
-            
-            exA += Actual.Siguiente().getValor();
-            Actual = Actual.Siguiente().Siguiente();
-            //Si el bloque actual, osea el que se acaba de conectar no tiene valor, error
-            if (!(InstBloqueValor(Actual))) return "";
-        }
-        
-        other = (other.isBlank())? "" : " " + other;
-        return EvLog(exA) + other;
+
+
+            if (Actual instanceof BloqueOP && Last instanceof BloqueOP) return "";
+
+
+
+            if (!MatExpresion(last) && Last instanceof BloqueOP) return "";
+
+
+            Last = Actual;
+            Actual = Actual.Siguiente();
+        } while (Actual != null);
+
+
+        track += last;
+        System.out.println("Texto: " + track);
+        System.out.println("Concatenar texto: " + EvOR(track));
+        return EvOR(track);
     }
     
     
@@ -118,109 +128,108 @@ public class EvaluadorExpresiones {
         dependiendo de ciertas distinciones, la expresion se cancela o se divide o se hace
     */
     public static boolean EvCondicion(Bloque inicial){
-        if (!(InstBloqueValor(inicial))) {
-            inicial.ponerRojo(inicial);
-            return false;
-        }
-        
-        Bloque Actual = inicial;
-        String lconexion = "";
-        String lvalue = "";
-        String exA = "";
-        
-        int l = 0;
-        int lm = 0;
-        
-        while (Actual != null){
-            //Se obtiene el valor
-            exA += Actual.getValor();
-            lvalue = BloqueValor.GetType(Actual.getValor());
-            
-            //Si no hay mas bloques o el siguiente bloque es otro valor, termina ahí
-            if (Actual.chorizontal.conexion == null ) {break;}
-            if (!(Actual.chorizontal.conexion instanceof BloqueOP)){ 
-                inicial.ponerRojo(Actual);
-                break;
-            }
-            
-            
-            //Si el bloque es string, debe haber un bloque == al lado y lo mismo alreves
-            if ((BloqueValor.GetType(Actual.getValor()).equals("Str")) && !Actual.Siguiente().getValor().equals("=")) {break;}
-            if (Actual.Siguiente().Siguiente() != null && (BloqueValor.GetType(Actual.Siguiente().Siguiente().getValor()).equals("Str")) && !Actual.getValor().equals("=")) {break;}
-            
-            
-            if (Actual instanceof BloqueLogico) l++;
-            if (Actual instanceof BloqueLMat) lm++;
-            
-            if (lm > l+1) {
-                inicial.ponerRojo(inicial);
-                return false;
-            }
-            
-            
-            
-            exA += Actual.chorizontal.conexion.getValor();
-            if (Actual.chorizontal.conexion == null) {
-                inicial.ponerRojo(inicial);
-                break;
-            }
-            Actual = Actual.chorizontal.conexion.chorizontal.conexion;
-            //Si el bloque actual, osea el que se acaba de conectar no es valor, error
-            if (!(InstBloqueValor(Actual))) {
-                inicial.ponerRojo(inicial);
-                break;
-            }
-        }
-        return ValBool(EvLog(exA));
+        String exA = Expresion(inicial);
+        return ValBool(EvOR(exA));
     }
-    
-    
-    /*
-        Recibe: (String ev) que es un String con la expresion a evaluar
-        Devuelve: (String) con la expresion ya evaluada si se puede dividir
-        Hace: Se evaluar expresiones lógicas (booleanas) compuestas por operadores lógicos & (y) y o (o), separando el problema a evaluar en otro Metodo {EvLogMat}.
-        y evaluando su resultado con & (y) y o (o)
-    */
-    public static String EvLog(String ev){
-        ev.replaceAll(" ", "");
-        String [] Sep = ev.split("&|___o___");
-        String[] separadores = new String[Sep.length - 1];
-        
-        if (Sep.length == 1){
-            return EvLogMat(Sep[0]);
+
+
+
+
+
+    /* Separa y evalua por separado el valor usando OR */
+    public static String EvOR(String ev){
+        ev = ev.replaceAll(" ","");
+        String [] Sep = ev.split("____o____");
+        System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
+        if (Sep.length == 1) return EvAND(ev);
+        String ev1 = EvAND(Sep[0]);
+        if (!IsBool(ev1)) return "";
+        for (int i = 1; i < Sep.length; i++) {
+            String ev2 = EvAND(Sep[i]);
+            if (!IsBool(ev2)) return "";
+            ev1 = (ValBool(ev1) || ValBool(ev2)) + "";
         }
-        
-        int u = 0;
-        for (int i = 0; i < ev.length(); i++) {
-            if (ev.charAt(i) == '&'||ev.charAt(i) == 'o'){
-                separadores[u] = ev.charAt(i)+"";
-                u++;
-            }
+        return ev1;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Separa y evalua por separado el valor usando AND */
+    public static String EvAND(String ev){
+        ev = ev.replaceAll(" ","");
+        String [] Sep = ev.split("____&____");
+        System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
+        if (Sep.length == 1) return EvLogEquality(ev);
+        String ev1 = EvLogEquality(Sep[0]);
+        if (!IsBool(ev1)) return "";
+        for (int i = 1; i < Sep.length; i++) {
+            String ev2 = EvLogEquality(Sep[i]);
+            if (!IsBool(ev2)) return "";
+            ev1 = (ValBool(ev1) && ValBool(ev2)) + "";
         }
-        
-        
-        try {
-            String l = EvLogMat(Sep[0]);
-            if (!BloqueValor.GetType(l).equals("Bol")) return "";
-            boolean x = ValBool(l);
-            for (int i = 1; i < Sep.length; i++) {
-                boolean x2 = ValBool(EvLogMat(Sep[i]));
-                switch (separadores[i - 1]) {
-                    case "&" -> {x  = x && x2;}
-                    case "o" -> {x = x || x2;}
+        return ev1;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Evalua igualdad o desigualdad de los resultados de las subexpresiones*/
+    public static String EvLogEquality(String ev){
+        String[] sep = ev.split("(?<=_{4})(==|!=)(?=_{4})");
+        if (sep.length == 1) return EvLogMat(ev);
+        String ev1 = EvLogMat(sep[0]);
+        for (int i = 1; i < sep.length; i+=2) {
+            String nev = EvLogMat(sep[i+1]);
+            if (ev1.isEmpty()) return "";
+            switch (sep[i]){
+                case "____=____" -> {
+                    ev1 = (ev1.equals(nev))? "True": "False";
+                    break;
+                }
+                case "____!=____" -> {
+                    ev1 = (!ev1.equals(nev))? "True": "False";
+                    break;
                 }
             }
-            return x+"";
-        }catch (Exception e){
-            
         }
-        
-        
-        return "";
+        return ev1;
     }
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
         Recibe: (String ev) que es un String con la expresion a evaluar
         Devuelve: (String) con la expresion ya evaluada si se pudo dividir
@@ -228,76 +237,45 @@ public class EvaluadorExpresiones {
         en dos expresiones usando otro Metodo {EvMatSum} y evaluando su resultado dependiendo del operador que separe a los dos >|<|=|!=|<=|>=.
     */
     public static String EvLogMat(String ev){
-        String [] Sep = ev.split(">|<|=|!=|<=|>=");
-        String[] separadores = new String[Sep.length - 1];
-        
-        int u = 0;
-        for (int i = 0; i < ev.length(); i++) {
-            switch (ev.charAt(i)){
-                case '>' -> {
-                    if (i+1 < ev.length() && ev.charAt(i+1) == '='){
-                        separadores[u] = ev.charAt(i)+"=";
-                        u++;i++;
-                    } else {
-                        separadores[u] = ev.charAt(i)+"";
-                        u++;
-                    }
-                    break;
-                }
-                case '<' -> {
-                    if (i+1 < ev.length() && ev.charAt(i+1) == '='){
-                        separadores[u] = ev.charAt(i)+"=";
-                        u++;i++;
-                    } else {
-                        separadores[u] = ev.charAt(i)+"";
-                        u++;
-                    }
-                    break;
-                }
-                case '!' -> {
-                    if (i+1 < ev.length() && ev.charAt(i+1) == '='){
-                        separadores[u] = ev.charAt(i)+"=";
-                        u++;i++;
-                    }
-                    break;
-                }
-                case '=' -> {
-                    separadores[u] = ev.charAt(i)+"";
-                    u++;
-                    break;
-                }
-                
-            }
-        }
-        if (Sep.length == 1){
-            return EvMatSum(Sep[0]);
-        }
-        
+        String [] Sep = ev.split("\"(?<=_{4})(>||<|<=|>=)(?=_{4})\"");
+
+        if (Sep.length == 1){ return EvMatSum(Sep[0]); }
+        if (Sep.length != 3){ return "";}
         
         try {
             double x = Double.parseDouble(EvMatSum(Sep[0]));
-            for (int i = 1; i < Sep.length; i++) {
-                double x2 = Double.parseDouble(EvMatSum(Sep[i]));
-                switch (separadores[i - 1]) {
-                    case "=" -> {return (x == x2)+"";}
-                    case "!=" -> {return (x != x2)+"";}
-                    case ">" -> {return (x > x2) + "";}
-                    case "<" -> {return (x < x2) + "";}
-                    case ">=" -> {return (x >= x2) + "";}
-                    case "<=" -> {return (x <= x2) + "";}
-                }
+            double x2 = Double.parseDouble(EvMatSum(Sep[2]));
+            switch (Sep[1]) {
+                case "____>____" -> {return (x > x2) + "";}
+                case "____<____" -> {return (x < x2) + "";}
+                case "____>=____" -> {return (x >= x2) + "";}
+                case "____<=____" -> {return (x <= x2) + "";}
             }
             return x+"";
-        }catch (Exception e){
-            
-        }
+        }catch (Exception e){ }
         
         
         return "";
     }
     
     
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
         Recibe: (String ev) que es un String con la expresion a evaluar
         Devuelve: (String) con la expresion ya evaluada si se pudo dividir
@@ -305,104 +283,110 @@ public class EvaluadorExpresiones {
         y se suman o se restan sus resultados
     */
     public static String EvMatSum(String ev){
-        String [] Sep = ev.split("\\+|\\-");
-        String[] separadores = new String[Sep.length - 1];
-        
-        if ( separadores.length == 0) return ev;
-        
-        int u = 0;
-        for (int i = 0; i < ev.length(); i++) {
-            if (ev.charAt(i) == '+'||ev.charAt(i) == '-'){
-                separadores[u] = ev.charAt(i)+"";
-                u++;
-            }
-        }
-        
-        if (Sep.length == 1){
+        String[] Sep = ev.split("(?<=_{4})[+-](?=_{4})");
+
+        if (Sep.length == 1) {
             return EvMatMult(Sep[0]);
         }
-        
-        
-        try {
-            double x = Double.parseDouble(EvMatMult(Sep[0]));
-            for (int i = 1; i < Sep.length; i++) {
-                double x2 = Double.parseDouble(EvMatMult(Sep[i]));
-                switch (separadores[i - 1]) {
-                    case "+" -> {
-                        x = x + x2;
-                        break;
-                    }
-                    case "-" -> {
-                        x = x - x2;
-                        break;
-                    }
+        System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
+        double result = 0.0;
+        boolean isPositive = true;
+
+        for (String part : Sep) {
+            part = part.trim();
+            if (part.isEmpty()) continue;
+
+            if (part.equals("____+____") || part.equals("____-____")) {
+                isPositive = part.equals("____+____");
+            } else {
+                try {
+                    double value = Double.parseDouble(EvMatMult(part));
+                    result = isPositive ? result + value : result - value;
+                } catch (NumberFormatException e) {
+                    return "";
                 }
             }
-            return x+"";
-        }catch (Exception e){
-            
         }
-        
-        
-        return "";
+        return String.valueOf(result);
     }
     
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
         Recibe: (String ev) que es un String con la expresion a evaluar
         Devuelve: (String) con la expresion ya evaluada si se pudo dividir
         Hace: Se evaluan las multiplicaciones y funciones en su nivel, para ello se separan otros terminos y se hacen, luego se realizan las operaciones respectivas x / %
     */
     public static String EvMatMult(String ev){
-        if (ev.equals("")) return"";
-        String [] Sep = ev.split("x|\\/|\\%");
-        String[] separadores = new String[Sep.length - 1];
-        
-        if (separadores.length == 0) return ev;
-        
-        System.out.println(ev);
-        int u = 0;
-        for (int i = 0; i < ev.length(); i++) {
-            if (ev.charAt(i) == 'x'||ev.charAt(i) == '/'||ev.charAt(i) == '%'){
-                separadores[u] = ev.charAt(i)+"";
-                u++;
-            }
-        }
-        if (Sep.length == 1){
+        if (ev.isEmpty()) return "";
+
+        String[] Sep = ev.split("(?<=_{4})(x|\\/|%)(?=_{4})");
+
+        if (Sep.length == 1) {
             return EvMatPot(Sep[0]);
         }
-        
-        try {
-            double x = Double.parseDouble(EvMatPot(Sep[0]));
-            for (int i = 1; i < Sep.length; i++) {
-                double x2 = Double.parseDouble(EvMatPot(Sep[i]));
-                switch (separadores[i - 1]) {
-                    case "x" -> {
-                        x = x * x2;
-                        break;
-                    }
-                    case "/" -> {
-                        x = x / x2;
-                        break;
-                    }
-                    case "%" -> {
-                        x = x % x2;
-                        break;
-                    }
-                }
+        System.out.println("Separation   "+Sep[0]);
+        double result = Double.parseDouble(EvMatPot(Sep[0]));
 
-                
+        for (int i = 1; i < Sep.length; i++) {
+            String current = Sep[i].trim();
+            if (current.isEmpty()) continue;
+
+            double nextValue = Double.parseDouble(EvMatPot(Sep[i + 1]));
+            switch (current) {
+                case "____x____":
+                    result *= nextValue;
+                    break;
+                case "____/____":
+                    if (nextValue == 0) {
+                        return "";
+                    }
+                    result /= nextValue;
+                    break;
+                case "____%____":
+                    result %= nextValue;
+                    break;
             }
-            return x+"";
-        }catch (Exception e){
-            
+            i++;
         }
-        
-        
-        return "";
+
+        return String.valueOf(result);
     }
     
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     /*
         Recibe: (String ev) que es un String con la expresion a evaluar
@@ -410,11 +394,11 @@ public class EvaluadorExpresiones {
         Hace: Se evaluan las potencias, se separan en numeros y se realizan las potencias respectivas, luego se devuelve el resultado
     */
     public static String EvMatPot(String ev){
-        String [] Sep = ev.split("\\^");
+        String [] Sep = ev.split("____\\^____");
         if (Sep.length == 1){
             return ev;
         }
-        
+
         try {
             double x = Double.parseDouble(Sep[0]);
             for (int i = 1; i < Sep.length; i++) {
@@ -425,11 +409,30 @@ public class EvaluadorExpresiones {
         }catch (Exception e){
             System.out.println("Errorcito");
         }
-        
+
         return "";
     }
     
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
         Recibe: (Bloque b, String tipovalor) el bloque operacion y el String que tiene el tipo de valor
         Devuelve: (boolean) devuelve si la operacion se puede hacer dependiendo del tipo de valor que se le envia
@@ -447,7 +450,15 @@ public class EvaluadorExpresiones {
         return false;
     }
     
-    
+
+
+
+
+
+
+
+
+
     
     /*
         Recibe: (Bloque b) el bloque a verificar
@@ -458,24 +469,50 @@ public class EvaluadorExpresiones {
         return (b instanceof BloqueValor || b instanceof BloqueVariable);
     }
     
-    
+
+
+
+
+
+
+
+
+
+
+
     /*
         Recibe: (String s) el bloque a verificar
         Devuelve: (boolean) devuelve el valor booleano del string
         Hace: Verifica si "s" es true, no tiene en cuenta mayusculas y minusculas solo que diga TrUE
     */
     public static boolean ValBool(String s){
-        return s.toLowerCase().equals("true");
+        s = s.toLowerCase();
+        return s.equals("true");
     }
-    
-    
+
+    public static boolean IsBool(String s){
+        s = s.toLowerCase();
+        return s.equals("true") || s.equals("false");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     /*
         Recibe: (String s) el string a verificar
         Devuelve: (boolean) devuelve si es una operacion matematica
         Hace: Revisa si el string está compuesto de solo caracteres de operaciones numericas
     */
     public static boolean MatExpresion(String s){
-        char [] chars = {'1','2','3','4','5','6','7','8','9','0','+','-','x','/','%','^','.',' '};
+        char [] chars = {'1','2','3','4','5','6','7','8','9','0','+','-','x','/','%','^','.',' ','_'};
         
         
         for (int i = 0; i < s.length(); i++) {

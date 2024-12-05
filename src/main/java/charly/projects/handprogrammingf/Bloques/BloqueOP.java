@@ -73,11 +73,19 @@ public class BloqueOP extends Bloque {
         }
       return false;
     }
-    
+
+    public static boolean isMathOperation(Bloque b){
+        return b.getValor().matches("(?<=_{4})(\\+|\\-|\\*|\\/|%|<=|>=|<|>)(?=_{4})");
+    }
+
+    public boolean isMathOperation(){
+        return getValor().matches("(?<=_{4})(\\+|\\-|\\*|\\/|%|<=|>=|<|>)(?=_{4})");
+    }
+
     //Devuelve el valor contenido en el atributo signo.
     @Override
     public String getValor(){
-        return this.signo;
+        return "____"+this.signo+"____";
     }
     
 }

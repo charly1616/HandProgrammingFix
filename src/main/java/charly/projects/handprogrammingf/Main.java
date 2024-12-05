@@ -1,5 +1,6 @@
 package charly.projects.handprogrammingf;
 
+import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -24,6 +25,9 @@ public class  Main extends Application {
         StackPane rootPane = new StackPane();
         Scene loadingScene = new Scene(rootPane);
 
+        System.out.println(EvaluadorExpresiones.EvMatSum("5____-____5"));
+
+        if (true) return;
         // Configurar el tamaño de la ventana de carga para que ocupe toda la pantalla
         Screen pantalla = Screen.getPrimary();
         javafx.geometry.Rectangle2D coordenadas = pantalla.getVisualBounds();
@@ -67,6 +71,8 @@ public class  Main extends Application {
     }
 
     public static void main(String[] args) {
+
+
         try {
             // Ruta al script de Python
             //String scriptPath = "src/Main/PythonCode.py";

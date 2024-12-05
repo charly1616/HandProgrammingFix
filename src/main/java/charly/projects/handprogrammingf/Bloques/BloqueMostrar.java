@@ -21,7 +21,11 @@ public class BloqueMostrar extends BloqueLabel {
     */
     @Override
     public void Hacer() {
-        EvaluadorExpresiones.Debug(Siguiente());
+        if (!EvaluadorExpresiones.Debug(Siguiente())){
+            System.out.println("PROBLEMA EN EEVALUAR EXPRESION");
+            return;
+        }
+
         if (Siguiente() == null){
             this.chorizontal.NecesitaSiguiente();
         }else {
