@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import javafx.scene.paint.Color;
 
+import javax.swing.*;
+
 
 public class BloqueEjecutable extends Bloque{
     public HashMap<String,String> variables = new HashMap<>();
@@ -111,10 +113,11 @@ public class BloqueEjecutable extends Bloque{
     @Override
     public void Hacer(){
         this.LineaEjecutador();
-        if (ejecutador.variables !=  null) variables.putAll(ejecutador.variables);
+
+        if (ejecutador != null && ejecutador.variables !=  null) variables.putAll(ejecutador.variables);
         if (this instanceof BloqueCondicional && !(this instanceof BloqueFor)) EjecutarHijos();
     }
-    
+
     /*
      se utiliza para ejecutar los bloques hijos de un bloque condicional en ciertas condiciones.
     Verifica si existe una conexión (conexion) con un bloque hijo y, si es el caso,
