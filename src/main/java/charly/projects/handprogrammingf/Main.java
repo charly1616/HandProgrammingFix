@@ -14,10 +14,14 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
+
+import javax.swing.*;
+
 public class  Main extends Application {
     
     
-    
+    boolean ModoDePruebaDeEvaluadorDeExpresiones2000 = false;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -25,9 +29,21 @@ public class  Main extends Application {
         StackPane rootPane = new StackPane();
         Scene loadingScene = new Scene(rootPane);
 
-        System.out.println(EvaluadorExpresiones.EvMatSum("5____-____5"));
 
-        if (true) return;
+        if (ModoDePruebaDeEvaluadorDeExpresiones2000) {
+            JTextArea textArea = new JTextArea(15, 60);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            JOptionPane.showConfirmDialog(null, scrollPane,
+                    "Ingresar las pruebas a realizar en diferentes lineas", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE);
+            String [] evs = textArea.getText().split("\\n");
+            StringBuilder finalRes = new StringBuilder();
+            for (String ev : evs) {
+                String res = EvaluadorExpresiones.EvOR(ev);
+                finalRes.append(res).append("\n");
+            }
+            JOptionPane.showMessageDialog(null,finalRes.toString(),"Respuestas",JOptionPane.PLAIN_MESSAGE);
+            return;
+        }
         // Configurar el tamaño de la ventana de carga para que ocupe toda la pantalla
         Screen pantalla = Screen.getPrimary();
         javafx.geometry.Rectangle2D coordenadas = pantalla.getVisualBounds();

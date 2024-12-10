@@ -87,7 +87,7 @@ public class GridController implements Initializable {
         Grid.getChildren().add(cirs);
 
         Grid.setBackground(Background.EMPTY);
-        GridView.setBackground(Background.fill(Color.BLACK));
+        GridView.setBackground(Background.fill(Color.WHITE));
 
        
 

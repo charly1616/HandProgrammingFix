@@ -3,8 +3,11 @@ package charly.projects.handprogrammingf.Model;
 
 import charly.projects.handprogrammingf.Bloques.*;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EvaluadorExpresiones {
     
@@ -53,7 +56,7 @@ public class EvaluadorExpresiones {
                 return false;
             }
 
-            if (!MatExpresion(last) && Last instanceof BloqueOP){
+            if (IsMatExpresion(last) && Last instanceof BloqueOP){
                 System.out.println("ERROR DE EXPRESION: Operación matematica junto valor diferente de numero: " + last + " No es un numero");
                 Actual.ponerRojo(Actual);
                 return false;
@@ -105,7 +108,7 @@ public class EvaluadorExpresiones {
 
 
 
-            if (!MatExpresion(last) && Last instanceof BloqueOP) return "";
+            if (IsMatExpresion(last) && Last instanceof BloqueOP) return "";
 
 
             Last = Actual;
@@ -170,9 +173,11 @@ public class EvaluadorExpresiones {
         System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
         if (Sep.length == 1) return EvLogEquality(ev);
         String ev1 = EvLogEquality(Sep[0]);
+        if (IsNum(ev1)) ev1 = (Double.parseDouble(ev1) == 0) ? "False":"True";
         if (!IsBool(ev1)) return "";
         for (int i = 1; i < Sep.length; i++) {
             String ev2 = EvLogEquality(Sep[i]);
+            if (IsNum(ev2)) ev2 = (Double.parseDouble(ev2) == 0) ? "False":"True";
             if (!IsBool(ev2)) return "";
             ev1 = (ValBool(ev1) && ValBool(ev2)) + "";
         }
@@ -196,7 +201,7 @@ public class EvaluadorExpresiones {
 
     /* Evalua igualdad o desigualdad de los resultados de las subexpresiones*/
     public static String EvLogEquality(String ev){
-        String[] sep = ev.split("(?<=_{4})(==|!=)(?=_{4})");
+        String[] sep = splitWithDelimiters(ev, new String[]{"____==____", "____!=____"});
         if (sep.length == 1) return EvLogMat(ev);
         String ev1 = EvLogMat(sep[0]);
         for (int i = 1; i < sep.length; i+=2) {
@@ -237,8 +242,7 @@ public class EvaluadorExpresiones {
         en dos expresiones usando otro Metodo {EvMatSum} y evaluando su resultado dependiendo del operador que separe a los dos >|<|=|!=|<=|>=.
     */
     public static String EvLogMat(String ev){
-        String [] Sep = ev.split("\"(?<=_{4})(>||<|<=|>=)(?=_{4})\"");
-
+        String [] Sep = splitWithDelimiters(ev, new String[]{"____>____", "____<____","____<=____","____>=____"});
         if (Sep.length == 1){ return EvMatSum(Sep[0]); }
         if (Sep.length != 3){ return "";}
         
@@ -257,8 +261,7 @@ public class EvaluadorExpresiones {
         
         return "";
     }
-    
-    
+
 
 
 
@@ -277,13 +280,49 @@ public class EvaluadorExpresiones {
 
 
     /*
+    * Funcion util
+    */
+    public static String[] splitWithDelimiters(String input, String[] delimiters) {
+        if (input == null || delimiters == null || delimiters.length == 0) {
+            return new String[]{input};
+        }
+
+        List<String> parts = new ArrayList<>();
+
+        String[] escapedDelimiters = Arrays.stream(delimiters)
+                .map(Pattern::quote)
+                .toArray(String[]::new);
+
+        String regex = String.join("|", escapedDelimiters);
+        Pattern pattern = Pattern.compile("(" + regex + ")");
+        Matcher matcher = pattern.matcher(input);
+
+        int lastEnd = 0;
+        while (matcher.find()) {
+            parts.add(input.substring(lastEnd, matcher.start()));
+            parts.add(matcher.group());
+            lastEnd = matcher.end();
+        }
+
+        if (lastEnd < input.length()) {
+            parts.add(input.substring(lastEnd));
+        }
+
+        parts.removeIf(String::isEmpty);
+
+        return parts.toArray(new String[0]);
+    }
+
+
+
+    /*
         Recibe: (String ev) que es un String con la expresion a evaluar
         Devuelve: (String) con la expresion ya evaluada si se pudo dividir
         Hace: Se evaluan las sumas o restas que existan, para ello se separan los terminos que se suman y se evaluan por separado (Metodo {EvMatMult}) 
         y se suman o se restan sus resultados
     */
     public static String EvMatSum(String ev){
-        String[] Sep = ev.split("(?<=_{4})[+-](?=_{4})");
+        String[] Sep = splitWithDelimiters(ev, new String[]{"____-____", "____+____"});
 
         if (Sep.length == 1) {
             return EvMatMult(Sep[0]);
@@ -335,7 +374,7 @@ public class EvaluadorExpresiones {
     public static String EvMatMult(String ev){
         if (ev.isEmpty()) return "";
 
-        String[] Sep = ev.split("(?<=_{4})(x|\\/|%)(?=_{4})");
+        String[] Sep = splitWithDelimiters(ev, new String[]{"____x____", "____/____","____%____"});
 
         if (Sep.length == 1) {
             return EvMatPot(Sep[0]);
@@ -400,14 +439,14 @@ public class EvaluadorExpresiones {
         }
 
         try {
-            double x = Double.parseDouble(Sep[0]);
-            for (int i = 1; i < Sep.length; i++) {
+            double x = Double.parseDouble(Sep[Sep.length-1]);
+            for (int i = Sep.length-2; i >= 0; i--) {
                 double x2 = Double.parseDouble(Sep[i]);
-                x = Math.pow(x, x2);
+                x = Math.pow(x2, x);
             }
             return x+"";
         }catch (Exception e){
-            System.out.println("Errorcito");
+            System.out.println("Error Evaluacion de potencia");
         }
 
         return "";
@@ -497,37 +536,36 @@ public class EvaluadorExpresiones {
 
 
 
-
-
-
-
-
-
-
-
+    /*
+        Recibe: (String s) el string a verificar
+        Devuelve: (boolean) devuelve si es un numero
+        Hace: Revisa si el string está compuesto de solo caracteres de numeros o punto
+    */
+    public static boolean IsNum(String s) {
+        if (s == null || s.isEmpty()) return false; // Handle null or empty string
+        try {
+            Double.parseDouble(s); // Attempt to parse as a number
+            return true; // It's a valid number
+        } catch (NumberFormatException e) {
+            return false; // Not a valid number
+        }
+    }
 
     /*
         Recibe: (String s) el string a verificar
-        Devuelve: (boolean) devuelve si es una operacion matematica
-        Hace: Revisa si el string está compuesto de solo caracteres de operaciones numericas
+        Devuelve: (boolean) devuelve si es una operación matemática
+        Hace: Revisa si el string está compuesto de solo caracteres de operaciones numéricas
     */
-    public static boolean MatExpresion(String s){
-        char [] chars = {'1','2','3','4','5','6','7','8','9','0','+','-','x','/','%','^','.',' ','_'};
-        
-        
+    public static boolean IsMatExpresion(String s) {
+        if (s == null || s.isEmpty()) return false; // Handle null or empty string
+        String validChars = "1234567890+-x/%^. _"; // Define valid characters as a string
+
         for (int i = 0; i < s.length(); i++) {
-            boolean f = false;
-            for (char u : chars){
-                if (s.charAt(i) == u){
-                    f = true;
-                    break;
-                }
+            if (validChars.indexOf(s.charAt(i)) == -1) { // Check if character is not in validChars
+                return false; // If any character is invalid, it's not a math expression
             }
-            if (!f) return false;
         }
-        
-        return true;
+        return true; // All characters are valid
     }
-    
     
 }
