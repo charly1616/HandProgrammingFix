@@ -37,7 +37,8 @@ public class EvaluadorExpresiones {
 
             String value = Actual.getValor();
 
-            if (BloqueOP.isMathOperation(Actual) && !(last).matches("^-?(\\d+(\\.\\d*)?|\\.\\d+)$")){
+            if (BloqueOP.isMathOperation(Actual) && !IsNum(last)){
+                System.out.println(last);
                 System.out.println("ERROR DE EXPRESIÓN: Operación matematica con valor diferente de numero: " + last + " No es un numero");
                 Actual.ponerRojo(Actual);
                 return false;
@@ -56,7 +57,7 @@ public class EvaluadorExpresiones {
                 return false;
             }
 
-            if (IsMatExpresion(last) && Last instanceof BloqueOP){
+            if (IsMatExpresion(last) && Actual instanceof BloqueOP){
                 System.out.println("ERROR DE EXPRESION: Operación matematica junto valor diferente de numero: " + last + " No es un numero");
                 Actual.ponerRojo(Actual);
                 return false;
@@ -93,7 +94,7 @@ public class EvaluadorExpresiones {
 
             String value = Actual.getValor();
 
-            if (BloqueOP.isMathOperation(Actual) && !(last).matches("^-?(\\d+(\\.\\d*)?|\\.\\d+)$")) return "";
+            if (BloqueOP.isMathOperation(Actual) && !IsNum(last)) return "";
 
 
             if (InstBloqueValor(Actual)){ last += value; }
@@ -108,7 +109,7 @@ public class EvaluadorExpresiones {
 
 
 
-            if (IsMatExpresion(last) && Last instanceof BloqueOP) return "";
+            if (IsMatExpresion(last) && Actual instanceof BloqueOP) return "";
 
 
             Last = Actual;

@@ -23,7 +23,12 @@ import javafx.util.Duration;
 
 
 public class Bloque extends Pane{
-    
+
+
+
+    public static int IDBloqueMax = 0;
+    public int IDBloque;
+
     public BloqueEjecutable ejecutador;
     
     public Conector conectado = null;
@@ -48,7 +53,7 @@ public class Bloque extends Pane{
     public double y;
     
     
-    public static final Color ColorBordeGlobal = new Color(1,1,1,1);
+    public static final Color ColorBordeGlobal = Color.BLACK;
     
     public Color ColorBloque;
     public Color ColorBorde;
@@ -62,10 +67,9 @@ public class Bloque extends Pane{
     public boolean Inconectableh; //No se puede conectar a otros
     public boolean Inconectablev;
     
-    
-    
     //Constructor
     public Bloque(double x, double y, Color ColorBloque) {
+        setID(IDBloqueMax);
         this.x = x;
         LastX = x;
         this.y = y;
@@ -81,7 +85,12 @@ public class Bloque extends Pane{
         Pintar();
     }
     
-    
+    public void setID(int ID){
+        this.IDBloque = ID;
+        if (ID >= IDBloqueMax){
+            IDBloqueMax = ID +1;
+        }
+    }
     
     public Bloque(double x, double y) {
         this.x = x;

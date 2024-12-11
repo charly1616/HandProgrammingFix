@@ -31,64 +31,83 @@ public class CreadorDeBloques {
         cuadricula.bloques.add(p);
     }
 
-    public void BloqueWhile(int x, int y) {
+    public Bloque BloqueInicio(Double x, Double y){
+        Bloque p = new BloqueInicio(x,y);
+        añadir(p);
+        return p;
+    }
+
+
+    public Bloque BloqueWhile(Double x, Double y) {
         Bloque p = new BloqueWhile(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueOPMAT(int x, int y, String signo) {
-        Bloque p = new BloqueMat(x, y, signo);
-        añadir(p);
-    }
-
-    public void BloqueMostrar(int x, int y) {
+    public Bloque BloqueMostrar(Double x, Double y) {
         Bloque p = new BloqueMostrar(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueIF(int x, int y) {
+    public Bloque BloqueIF(Double x, Double y) {
         Bloque p = new BloqueIF(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueElif(int x, int y) {
+    public Bloque BloqueElif(Double x, Double y) {
         Bloque p = new BloqueElif(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueElse(int x, int y) {
+    public Bloque BloqueElse(Double x, Double y) {
         Bloque p = new BloqueElse(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueValor(int x, int y) {
-        Bloque p = new BloqueValor(x, y);
+    public Bloque BloqueValor(Double x, Double y, String valor) {
+        BloqueValor p = new BloqueValor(x, y,valor);
         añadir(p);
+        return p;
     }
 
-    public void BloqueFor(int x, int y) {
+    public Bloque BloqueFor(Double x, Double y) {
         Bloque p = new BloqueFor(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueVariable(int x, int y) {
-        Bloque p = new BloqueVariable(x, y);
+    public Bloque BloqueVariable(Double x, Double y, String valor) {
+        BloqueVariable p = new BloqueVariable(x, y,valor);
         añadir(p);
+        return p;
     }
 
-    public void BloquePedir(int x, int y) {
+    public Bloque BloquePedir(Double x, Double y) {
         Bloque p = new BloquePedir(x, y);
         añadir(p);
+        return p;
     }
 
-    public void BloqueLogico(int x, int y, String signo) {
+    public Bloque BloqueLogico(Double x, Double y, String signo) {
         Bloque p = new BloqueLogico(x, y, signo);
         añadir(p);
+        return p;
     }
 
-    public void BloqueLMat(int x, int y, String signo) {
+    public Bloque BloqueLMat(Double x, Double y, String signo) {
         Bloque p = new BloqueLMat(x, y, signo);
         añadir(p);
+        return p;
+    }
+
+    public Bloque BloqueOPMAT(Double x, Double y, String signo) {
+        Bloque p = new BloqueMat(x, y, signo);
+        añadir(p);
+        return p;
     }
     
     public void añadir(Bloque p){

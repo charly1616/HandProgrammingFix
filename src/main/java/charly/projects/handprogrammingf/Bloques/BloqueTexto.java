@@ -79,19 +79,19 @@ public abstract class BloqueTexto extends Bloque{
             
             
         /*
-        Se verifica la longitud del nuevo valor del TextField (valornuevo) en comparación con LetrasMax. 
+        Se verifica la longitud del nuevo valor del TextField (valornuevo) en comparación con LetrasMax.
         Si el nuevo valor supera la longitud máxima permitida,se restaura el valor anterior (valorviejo)
         Esto asegura que no se permitan más caracteres de los que se especifican en LetrasMax.
         */
        if (valornuevo.length()>this.LetrasMax ){
                 valor.setText(valorviejo);
         }
-            
-       
+
+
        //Ajuste del ancho del TextField y del bloque padre
         double textWidth = computeTextWidth(valor.getFont(), valornuevo);
-            
-        
+
+
         //Si el ancho calculado más 30 unidades supera el límite (Limite más 77 unidades), no se realiza ningún ajuste.
         if (textWidth + 30 > Limite+77){
         }
@@ -100,7 +100,7 @@ public abstract class BloqueTexto extends Bloque{
                 setAncho(textWidth + 75);
         } else {
                 valor.setPrefWidth(77);
-                setAncho(77 + 45);
+                setAncho(122);
             }
             TypeVariable();
         });
@@ -112,8 +112,7 @@ public abstract class BloqueTexto extends Bloque{
         
         setAncho(130);
     }
-    
-    
+
     //Este método es abstracto y debe implementarse en las clases que heredan de BloqueTexto
     public abstract void TypeVariable();
     

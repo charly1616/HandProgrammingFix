@@ -92,30 +92,30 @@ public class MenuBloques extends VBox{
     }
 
     private void crearMientras(){
-        creadorb.BloqueWhile(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+        creadorb.BloqueWhile(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
     }
 
     private void creardato(){
-        creadorb.BloqueValor(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+        creadorb.BloqueValor(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY(),"");
     }
 
     private void crearVar(){
-        creadorb.BloqueVariable(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+        creadorb.BloqueVariable(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY(),"");
     }
     
     
     private void crearMostrar(){
-        creadorb.BloqueMostrar(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+        creadorb.BloqueMostrar(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
     }
 
     private void crearIf(){
-        creadorb.BloqueIF(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+        creadorb.BloqueIF(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
     }
     
     
     
     private void crearPedir(){
-        creadorb.BloquePedir(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+        creadorb.BloquePedir(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
     }
     
     

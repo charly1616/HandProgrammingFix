@@ -21,7 +21,9 @@ public class BloqueLogico extends BloqueOP{
     @Override
     public String getValor(){
         if (signo.equals("o")){
-            return "___o___";
+            return "____o____";
+        } else if (signo.equals("&")){
+            return "____&____";
         }
         return this.signo;
     }

@@ -8,6 +8,7 @@ public class BloquePedir extends BloqueLabel {
 
     public BloquePedir(double x, double y) {
         super(x, y, Color.rgb(158, 160, 40),"Pedir");
+        setID(IDBloqueMax);
         this.Inconectableh = true;
         IniciarComponentes();
         Pintar();

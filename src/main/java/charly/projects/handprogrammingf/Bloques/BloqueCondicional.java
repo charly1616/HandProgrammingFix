@@ -19,6 +19,7 @@ public class BloqueCondicional extends BloqueEjecutable{
     
     public BloqueCondicional(double x, double y, String Text, Color c) {
         super(x, y);
+        setID(IDBloqueMax);
         if (Text == null || Text.trim().isEmpty()) {
             throw new IllegalArgumentException("El texto del bloque no puede ser nulo o vacío.");
         }

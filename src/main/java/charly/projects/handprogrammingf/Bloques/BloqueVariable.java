@@ -9,7 +9,12 @@ public class BloqueVariable extends BloqueTexto{
     
     
     public String valorVariable = "";
-    
+
+    public BloqueVariable(double x, double y,String nom) {
+        super(x, y, Color.rgb(255, 165, 0), 250, 15);
+        this.valor.setText(nom);
+    }
+
     public BloqueVariable(double x, double y) {
         super(x, y, Color.rgb(255, 165, 0), 250, 15);
     }

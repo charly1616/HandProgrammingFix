@@ -6,9 +6,14 @@ import javafx.scene.paint.Color;
 
 
 public class BloqueValor extends BloqueTexto{
-    
-    
-    
+
+
+    public BloqueValor(double x, double y, String val) {
+        super(x, y, Color.rgb(247, 218, 63), 300,250);
+        this.DesactivarVertical();
+        this.Inconectablev = true;
+        this.valor.setText(val);
+    }
     
     public BloqueValor(double x, double y) {
         super(x, y, Color.rgb(247, 218, 63), 300,250);

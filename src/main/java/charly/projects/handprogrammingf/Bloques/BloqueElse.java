@@ -12,6 +12,7 @@ public class BloqueElse extends BloqueCondicional{
     
     public BloqueElse(double x, double y) {
         super(x, y, "Sino", Color.rgb(50, 229, 205));
+        setID(IDBloqueMax);
         this.DesactivarHorizontal();
     }
     

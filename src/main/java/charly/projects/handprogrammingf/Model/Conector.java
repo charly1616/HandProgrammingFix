@@ -29,7 +29,7 @@ public class Conector extends Pane{
     
     
     
-    public static final Color ColorLineaGlobal = Color.color(1,1,1,1);
+    public static final Color ColorLineaGlobal = Color.BLACK;
     public static final Color ColorLineaPre = new Color(1,0.2,1,0.05);
     
     

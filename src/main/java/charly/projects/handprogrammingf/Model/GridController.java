@@ -5,6 +5,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -62,7 +65,7 @@ public class GridController implements Initializable {
     public double mouseAnchorY;
 
     private double lastMouseX, lastMouseY;
-
+    private FileSaver fileSaver;
     /* 
         Recibe: (URL, ResourceBundle) cosas que son necesarias para JavaFX
         Devuelve: (void) (Nada)
@@ -72,6 +75,8 @@ public class GridController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        fileSaver = new FileSaver(this);
 
         Screen pantalla = Screen.getPrimary();
         javafx.geometry.Rectangle2D coordenadas = pantalla.getVisualBounds();
@@ -101,6 +106,15 @@ public class GridController implements Initializable {
 
         GridView.getChildren().add(layout);
         Menu file = new Menu("File");
+        MenuItem saveFile = new MenuItem("Save file");
+        MenuItem loadFile = new MenuItem("Load file");
+        saveFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                fileSaver.SaveFile();
+            }
+        });
+        file.getItems().addAll(saveFile, loadFile);
         Menu about = new Menu("About");
         layout.setTop(menuBar);
 
@@ -165,46 +179,46 @@ public class GridController implements Initializable {
         });
         Bloque p;
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueMostrar(1500, 360);
+            creadorb.BloqueMostrar(1500.0, 360.0);
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueWhile(1720, 720);
+            creadorb.BloqueWhile(1720.0, 720.0);
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueFor(1500, 720);
+            creadorb.BloqueFor(1500.0, 720.0);
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueIF(1500, 580);
+            creadorb.BloqueIF(1500.0, 580.0);
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueElif(1720, 580);
+            creadorb.BloqueElif(1720.0, 580.0);
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueElse(1720, 220);
+            creadorb.BloqueElse(1720.0, 220.0);
         }
 
         for (int i = 0; i < 20; i++) {
-            creadorb.BloqueValor(1500, 240);
+            creadorb.BloqueValor(1500.0, 240.0,"");
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloqueVariable(1500, 120);
+            creadorb.BloqueVariable(1500.0, 120.0,"");
         }
 
         for (int i = 0; i < 10; i++) {
-            creadorb.BloquePedir(1720, 360);
+            creadorb.BloquePedir(1720.0, 360.0);
         }
 
         String[] signos = {"+", "-", "x", "^", "/", "%"};
 
         for (int j = 0; j < signos.length; j++) {
             for (int i = 0; i < 10; i++) {
-                creadorb.BloqueOPMAT(100 * j, 1000, signos[j]);
+                creadorb.BloqueOPMAT(100.0 * j, 1000.0, signos[j]);
             }
         }
 
@@ -212,7 +226,7 @@ public class GridController implements Initializable {
 
         for (int j = 0; j < signos2.length; j++) {
             for (int i = 0; i < 10; i++) {
-                creadorb.BloqueLMat(100 * j, 1100, signos2[j]);
+                creadorb.BloqueLMat(100.0 * j, 1100.0, signos2[j]);
 
             }
         }
@@ -221,7 +235,7 @@ public class GridController implements Initializable {
 
         for (int j = 0; j < signos3.length; j++) {
             for (int i = 0; i < 10; i++) {
-                creadorb.BloqueLogico(100 * j, 1200, signos3[j]);
+                creadorb.BloqueLogico(100.0 * j, 1200.0, signos3[j]);
 
             }
         }
@@ -237,9 +251,7 @@ public class GridController implements Initializable {
             }
         });
 
-        p = new BloqueInicio(0, 0);
-        hacerBloqueMovible(p);
-        añadirBloque(p);
+        creadorb.BloqueInicio(0.0,0.0);
 
         MenuBloques u = new MenuBloques(creadorb);
         GridView.getChildren().add(u);

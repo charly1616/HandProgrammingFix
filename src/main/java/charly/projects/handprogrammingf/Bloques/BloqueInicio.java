@@ -34,6 +34,7 @@ public class BloqueInicio extends BloqueEjecutable{
     
     public BloqueInicio(double x, double y) {
         super(x,y);
+        setID(IDBloqueMax);
         this.ColorBloque = Color.rgb(86, 255, 114);
         this.ancho = 160;
         
