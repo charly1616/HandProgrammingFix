@@ -39,10 +39,12 @@ public class MenuBloques extends VBox{
         // Botón 1
         Button button1 = createButton(Objects.requireNonNull(getClass().getResource("/Images/Buttons/Box.png")).getPath(), "#FFA917");
         getChildren().add(button1);
+        button1.setOnAction(e -> {crearVar();});
 
         // Botón 2
-        Button button2 = createButton(Objects.requireNonNull(getClass().getResource("/Images/Math/Multiply.png")).getPath(), "#817590");
+        Button button2 = createButton(Objects.requireNonNull(getClass().getResource("/Images/Math/Multiply.png")).getPath(), "#FFFF00");
         getChildren().add(button2);
+        button2.setOnAction(e -> {creardato();});
 
         // Separador
         Separator separator1 = new Separator();
@@ -53,10 +55,14 @@ public class MenuBloques extends VBox{
         // Botón 3
         Button button3 = createButton(getClass().getResource("/Images/Ejecutable/Repeat_1.png").getPath(), "#A77CE0");
         getChildren().add(button3);
+        button3.setOnAction(e -> {crearMientras();});
 
         // Botón 4
         Button button4 = createButton(getClass().getResource("/Images/Ejecutable/Share_1.png").getPath(), "#88DBFF");
         getChildren().add(button4);
+        button4.setOnAction(e -> {
+            crearIf();
+        });
 
         // Separador
         Separator separator3 = new Separator();
@@ -84,12 +90,26 @@ public class MenuBloques extends VBox{
         setPadding(new Insets(20.0));
 
     }
-    
-    
+
+    private void crearMientras(){
+        creadorb.BloqueWhile(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+    }
+
+    private void creardato(){
+        creadorb.BloqueValor(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+    }
+
+    private void crearVar(){
+        creadorb.BloqueVariable(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+    }
     
     
     private void crearMostrar(){
         creadorb.BloqueMostrar(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
+    }
+
+    private void crearIf(){
+        creadorb.BloqueIF(400 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400 - (int)creadorb.cuadricula.Grid.getTranslateY());
     }
     
     
