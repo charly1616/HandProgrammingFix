@@ -74,7 +74,10 @@ public class BloqueVariable extends BloqueTexto{
         ejecutador.setValor(this, nuevoValor);
     }
 
-    
+    @Override
+    public String getSaveValue(){return getNombre();}
+
+
     /*
     Este método verifica si valorVariable contiene un valor. Si contiene un valor no nulo y no está vacío, devuelve ese valor.
     De lo contrario, devuelve "Non" para indicar que la variable no está definida.

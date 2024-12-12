@@ -87,5 +87,6 @@ public class BloqueOP extends Bloque {
     public String getValor(){
         return "____"+this.signo+"____";
     }
-    
+    @Override
+    public String getSaveValue(){return this.signo;}
 }

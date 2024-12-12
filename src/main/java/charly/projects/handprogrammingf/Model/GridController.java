@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 /**
  *
@@ -57,6 +58,8 @@ public class GridController implements Initializable {
     public ArrayList<Bloque> bloques = new ArrayList<Bloque>();
     public ArrayList<Circle> puntos = new ArrayList<Circle>();
     public Pane cirs = new Pane();
+
+    public Stage stage = null;
 
     private List<Bloque> bloquesSeleccionados = new ArrayList<>();
 
@@ -100,7 +103,7 @@ public class GridController implements Initializable {
 
 
         BorderPane layout = new BorderPane();
-        layout.setLayoutX(00);
+        layout.setLayoutX(0);
         layout.setLayoutY(15);
         MenuBar menuBar = new MenuBar();
 
@@ -114,6 +117,13 @@ public class GridController implements Initializable {
                 fileSaver.SaveFile();
             }
         });
+        loadFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                fileSaver.LoadFile();
+            }
+        });
+
         file.getItems().addAll(saveFile, loadFile);
         Menu about = new Menu("About");
         layout.setTop(menuBar);
@@ -177,68 +187,45 @@ public class GridController implements Initializable {
                 }
             }
         });
-        Bloque p;
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueMostrar(1500.0, 360.0);
-        }
 
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueWhile(1720.0, 720.0);
-        }
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueMostrar(1500.0, 360.0); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueWhile(1720.0, 720.0); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueFor(1500.0, 720.0); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueIF(1500.0, 580.0); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueElif(1720.0, 580.0); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueElse(1720.0, 220.0); }
+//
+//        for (int i = 0; i < 20; i++) { creadorb.BloqueValor(1500.0, 240.0,""); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloqueVariable(1500.0, 120.0,""); }
+//
+//        for (int i = 0; i < 10; i++) { creadorb.BloquePedir(1720.0, 360.0); }
+//
+//        String[] signos = {"+", "-", "x", "^", "/", "%"};
+//
+//        for (int j = 0; j < signos.length; j++) {
+//            for (int i = 0; i < 10; i++) { creadorb.BloqueOPMAT(100.0 * j, 1000.0, signos[j]); }
+//        }
+//
+//        String[] signos2 = {"=", "!=", ">", "<", "<=", ">="};
+//
+//        for (int j = 0; j < signos2.length; j++) {
+//            for (int i = 0; i < 10; i++) { creadorb.BloqueLMat(100.0 * j, 1100.0, signos2[j]); }
+//        }
+//
+//        String[] signos3 = {"&", "o"};
+//
+//        for (int j = 0; j < signos3.length; j++) {
+//            for (int i = 0; i < 10; i++) { creadorb.BloqueLogico(100.0 * j, 1200.0, signos3[j]); }
+//        }
 
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueFor(1500.0, 720.0);
-        }
 
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueIF(1500.0, 580.0);
-        }
 
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueElif(1720.0, 580.0);
-        }
-
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueElse(1720.0, 220.0);
-        }
-
-        for (int i = 0; i < 20; i++) {
-            creadorb.BloqueValor(1500.0, 240.0,"");
-        }
-
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloqueVariable(1500.0, 120.0,"");
-        }
-
-        for (int i = 0; i < 10; i++) {
-            creadorb.BloquePedir(1720.0, 360.0);
-        }
-
-        String[] signos = {"+", "-", "x", "^", "/", "%"};
-
-        for (int j = 0; j < signos.length; j++) {
-            for (int i = 0; i < 10; i++) {
-                creadorb.BloqueOPMAT(100.0 * j, 1000.0, signos[j]);
-            }
-        }
-
-        String[] signos2 = {"=", "!=", ">", "<", "<=", ">="};
-
-        for (int j = 0; j < signos2.length; j++) {
-            for (int i = 0; i < 10; i++) {
-                creadorb.BloqueLMat(100.0 * j, 1100.0, signos2[j]);
-
-            }
-        }
-
-        String[] signos3 = {"&", "o"};
-
-        for (int j = 0; j < signos3.length; j++) {
-            for (int i = 0; i < 10; i++) {
-                creadorb.BloqueLogico(100.0 * j, 1200.0, signos3[j]);
-
-            }
-        }
         Grid.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.DELETE) { // Cambiado de KeyCode.BACK_SPACE a KeyCode.DELETE
                 // Verificar si hay bloques seleccionados para eliminar

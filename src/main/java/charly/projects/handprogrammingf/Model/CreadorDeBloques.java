@@ -105,6 +105,7 @@ public class CreadorDeBloques {
     }
 
     public Bloque BloqueOPMAT(Double x, Double y, String signo) {
+        //System.out.println("Signo creado "+signo);
         Bloque p = new BloqueMat(x, y, signo);
         añadir(p);
         return p;

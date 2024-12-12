@@ -1,17 +1,21 @@
 package charly.projects.handprogrammingf.Model;
 
 import charly.projects.handprogrammingf.Bloques.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 
-import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileSaver {
 
@@ -36,6 +40,7 @@ public class FileSaver {
 
     public final CreadorDeBloques creadorDeBloques;
     public final GridController father;
+    private final Stage primaryStage;
 
     public static final HashMap<String, BiFunction<Double[],String,Bloque>> FunctionsBloques = new HashMap<>();
     private void InitializeFunctionsBloques(){
@@ -50,12 +55,13 @@ public class FileSaver {
         FunctionsBloques.put(Prefix[8], (coord,value) -> creadorDeBloques.BloqueMostrar(coord[0],coord[1]));
         FunctionsBloques.put(Prefix[9], (coord,value) -> creadorDeBloques.BloquePedir(coord[0],coord[1]));
         FunctionsBloques.put(Prefix[10], (coord,value) -> creadorDeBloques.BloqueOPMAT(coord[0],coord[1],value));
-        FunctionsBloques.put(Prefix[10], (coord,value) -> creadorDeBloques.BloqueLogico(coord[0],coord[1],value));
-        FunctionsBloques.put(Prefix[10], (coord,value) -> creadorDeBloques.BloqueLMat(coord[0],coord[1],value));
+        FunctionsBloques.put(Prefix[11], (coord,value) -> creadorDeBloques.BloqueLogico(coord[0],coord[1],value));
+        FunctionsBloques.put(Prefix[12], (coord,value) -> creadorDeBloques.BloqueLMat(coord[0],coord[1],value));
     }
 
     public FileSaver(GridController father){
         this.father = father;
+        primaryStage = father.stage;
         creadorDeBloques = father.creadorb;
         InitializeFunctionsBloques();
     }
@@ -81,28 +87,55 @@ public class FileSaver {
         return "";
     }
 
-    public static String getSaveFilePath() {
-        JFileChooser fileChooser = new JFileChooser();
+
+    /**
+     * Obtiene la direccion para guardar un archivo de tipo .block
+     * @return String - Ruta del archivo o cadena vacía si no se seleccionó
+     */
+    public String getSaveFilePath() {
+        FileChooser fileChooser = new FileChooser();
 
         // Establecer el filtro de archivo para solo mostrar archivos .block
-        fileChooser.setDialogTitle("Guardar archivo .block");
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Archivos Block (*.block)", "block"));
+        fileChooser.setTitle("Guardar archivo .block");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos Block (*.block)", "*.block"));
 
-        // Mostrar el diálogo de guardar archivo
-        int result = fileChooser.showSaveDialog(null);
+        // Mostrar el cuadro de diálogo de guardar archivo
+        File selectedFile = fileChooser.showSaveDialog(primaryStage);
 
-        // Si el usuario selecciona "Guardar"
-        if (result == JFileChooser.APPROVE_OPTION) {
-            // Obtener el archivo seleccionado
-            File selectedFile = fileChooser.getSelectedFile();
-
+        if (selectedFile != null) {
             // Asegurarse de que el archivo tenga la extensión .block
             if (!selectedFile.getName().endsWith(".block")) {
                 selectedFile = new File(selectedFile.getAbsolutePath() + ".block");
             }
 
-            // Devolver la ruta del archivo como un String
             return selectedFile.getAbsolutePath();
+        }
+
+        return "";
+    }
+
+    /**
+     * Funcion que pide la direccion del archivo con una UI de JavaFX
+     * @return String - Ruta del archivo o cadena vacía si no se encontró
+     */
+    public  String getExistingBlockFilePath() {
+        FileChooser fileChooser = new FileChooser();
+
+        // Establecer el filtro de archivo para solo mostrar archivos .block
+        fileChooser.setTitle("Seleccionar archivo .block");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos Block (*.block)", "*.block"));
+
+        // Mostrar el cuadro de diálogo para abrir archivo
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+        if (selectedFile != null) {
+            // Verificar si el archivo tiene la extensión .block y existe
+            if (selectedFile.getName().endsWith(".block") && selectedFile.exists()) {
+                return selectedFile.getAbsolutePath();
+            } else {
+                // Mostrar mensaje de error si el archivo no cumple con los requisitos
+                System.out.println("El archivo seleccionado no es un archivo válido .block o no existe.");
+            }
         }
 
         return "";
@@ -112,7 +145,7 @@ public class FileSaver {
 
     public void SaveFile(){
         String filePath = getSaveFilePath();
-
+        if (filePath.isEmpty()) return;
 
 
         String file = "";
@@ -125,7 +158,7 @@ public class FileSaver {
             int id = b.IDBloque;
             String x = b.getX() + "";
             String y = b.getY() + "";
-            String val = b.getValor();
+            String val = b.getSaveValue();
 
             file += String.format("%s%s(%d,%s,%s,%s)\n",
                     conectionType.isEmpty() ? "" : BlockConector + conectionType,
@@ -137,7 +170,113 @@ public class FileSaver {
             writer.write(file);  // Writing your custom data to the file
             System.out.println("Data written to " + filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Archivo no guardado");
+        }
+    }
+
+
+    private final HashMap<Double, Bloque> bloquesPorID = new HashMap<Double, Bloque>();
+    private final Queue<Pair<Bloque,Double>> bloquesAConectar = new ArrayDeque<>();
+    private final Queue<String> bloquesCTypes = new ArrayDeque<>();
+
+    //Carga el archivo y crea los bloques de cada linea
+    public void LoadFile(){
+        String filePath = getExistingBlockFilePath();
+        if (filePath.isEmpty()) return;
+
+
+        //Obtener el contenido del archivo
+        String loadText = "";
+        try {
+            loadText = Files.readString(Paths.get(filePath));
+        } catch (Exception e){ System.out.println("Archivo no encontrado"); }
+
+
+        String [] Lines = loadText.split("\\R");
+        for (String line : Lines){
+            LoadBlockLine(line);
+        }
+
+        clearPool();
+    }
+
+    /*
+    * Para cada bloque esperando ser conectado, dependiendo de su conexion se hace la correspondiente
+    * Se vacia la fila de los bloques
+    * */
+    public void clearPool(){
+        while(!bloquesAConectar.isEmpty() && !bloquesCTypes.isEmpty()){
+            String type = bloquesCTypes.poll();
+            Pair<Bloque,Double> bid = bloquesAConectar.poll();
+            assert bid != null;
+            System.out.println(bid.getValue());
+            Bloque p = bloquesPorID.get(bid.getValue());
+            if (p == null) continue;
+
+            //System.out.println("Conecting : " + bid.getKey().IDBloque + " With : " + bid.getValue());
+
+            switch (type) {
+                case "/" -> {
+                    if (p.cvertical != null) p.cvertical.setConexion(bid.getKey());
+                }
+                case "-" -> {
+                    if (p.chorizontal != null) p.chorizontal.setConexion(bid.getKey());
+                }
+                case "=" -> {
+                    if (p.cvertical != null && p.cvertical.inner != null)
+                        p.cvertical.inner.setConexion(bid.getKey());
+                }
+            }
+        }
+    }
+
+
+    /*
+    * Recuerda que cada linea en el archivo.block es de la forma TipoBloque(ID,X,Y,String) y aveces tienen al principio un Numero(Simbolo)...
+    * Lo que hace esta funcion es separar la linea en sus componentes, crear el bloque y dejar listo las conexiones que se tienen que hacer
+    * */
+    public void LoadBlockLine(String line){
+        //Separate the general parts
+        String regex = "(\\d+)?\\s*([=/\\-\\[])?\\s*(.*)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(line);
+
+        // Variables para los valores extraídos
+        int number = -1; // Valor predeterminado
+        String symbol = ""; // Cadena vacía por defecto
+        String text = line; // Texto cualquiera
+
+
+
+        //Declares the symbol and the number if found
+        if (matcher.matches()) {
+            if (matcher.group(1) != null) number = Integer.parseInt(matcher.group(1));
+            if (matcher.group(2) != null) symbol = matcher.group(2);
+            if (matcher.group(3) != null) text = matcher.group(3).trim();
+        }
+
+
+        //TypeOfBlock
+        String BlockType = text.substring(0,3);
+        if (!Arrays.asList(Prefix).contains(BlockType)) return; //Irse si es incompatible
+        //Separate the parameters
+        //(int,double,double,String)
+        String[] Params = text.substring(4,text.length()-1).split(",");
+        Double[] doubles = {Double.parseDouble(Params[1]),Double.parseDouble(Params[2])};
+        String value = (Params.length == 4) ? Params[3] : "";
+
+        //Create the Block
+        Bloque b = FunctionsBloques.get(BlockType).apply(doubles,value);
+        b.setID((int) Double.parseDouble(Params[0]));
+        //System.out.println(Arrays.asList(Params).toString());
+
+
+        //Add the block to the ID pool
+        bloquesPorID.put(b.IDBloque+0.0,b);
+        //If needed, add the block to the Conection pool
+        if (!symbol.isEmpty()){
+            bloquesAConectar.add(new Pair<>(b,number+0.0));
+            bloquesCTypes.add(symbol);
         }
     }
 }

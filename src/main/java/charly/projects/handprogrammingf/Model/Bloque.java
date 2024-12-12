@@ -470,7 +470,9 @@ public class Bloque extends Pane{
     public String getValor(){
         return "";
     }
-    
+
+    public String getSaveValue(){return "";}
+
      public void setEjecutador(BloqueEjecutable b){
         this.ejecutador = b;
     }

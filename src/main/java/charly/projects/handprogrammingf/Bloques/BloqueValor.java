@@ -89,6 +89,8 @@ public class BloqueValor extends BloqueTexto{
             return false;
         }
     }
-   
+
+    @Override
+    public String getSaveValue(){return this.valor.getText();}
     
 }

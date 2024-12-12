@@ -1,5 +1,6 @@
 package charly.projects.handprogrammingf;
 
+import charly.projects.handprogrammingf.Controller.Controller;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -55,7 +56,7 @@ public class  Main extends Application {
         primaryStage.setScene(loadingScene);
 
         // Cargar la imagen de fondo
-        System.out.println(getClass().getResource("/Fxml/VentanasFx/ventana.fxml") + "IMAGEN");
+        // System.out.println(getClass().getResource("/Fxml/VentanasFx/ventana.fxml") + "IMAGEN");
         Image backgroundImage = new Image("/Images/2.jpg");
         ImageView backgroundImageView = new ImageView(backgroundImage);
         rootPane.getChildren().add(backgroundImageView);
@@ -68,8 +69,10 @@ public class  Main extends Application {
                 }),
                 new KeyFrame(Duration.seconds(3), event -> {
                     try {
-                        Parent mainRoot = FXMLLoader.load(getClass().getResource("/Fxml/VentanasFx/ventana.fxml"));
+                        FXMLLoader fxm = new FXMLLoader();
+                        Parent mainRoot = fxm.load(getClass().getResource("/Fxml/VentanasFx/ventana.fxml"));
                         Scene mainScene = new Scene(mainRoot);
+                        Controller c = fxm.getController();
                         primaryStage.setScene(mainScene);
                         primaryStage.setTitle("PROYECTO SISTEMAS");
                     } catch (Exception e) {

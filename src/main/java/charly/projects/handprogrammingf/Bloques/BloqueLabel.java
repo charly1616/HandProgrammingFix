@@ -15,6 +15,7 @@ public class BloqueLabel extends Bloque {
 
     public BloqueLabel(double x, double y, Color ColorBloque, String Text) {
         super(x, y);
+        setID(IDBloqueMax);
         this.Text = Text;
         this.ColorBloque = ColorBloque;
         IniciarComponentes();
