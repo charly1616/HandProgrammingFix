@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.BiFunction;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,10 +22,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -63,6 +61,12 @@ public class GridController implements Initializable {
 
     private List<Bloque> bloquesSeleccionados = new ArrayList<>();
 
+
+    public BiFunction<Double[],String,Bloque> functionCreadora = null;
+    public final PreBlockCursor pcursor = new PreBlockCursor(0,0);
+
+
+
     //Movimiento del fondo
     public double mouseAnchorX;
     public double mouseAnchorY;
@@ -96,10 +100,24 @@ public class GridController implements Initializable {
 
         Grid.setBackground(Background.EMPTY);
         GridView.setBackground(Background.fill(Color.WHITE));
-
+        Grid.getChildren().add(pcursor);
        
 
-       
+        GridView.setOnMouseMoved(event -> {
+            if (functionCreadora != null) {
+                pcursor.mouseAnchorX = -Grid.getTranslateX() / scale;
+                pcursor.mouseAnchorY = -Grid.getTranslateY() / scale;
+
+                double adjustedX = (event.getX() / scale) + pcursor.mouseAnchorX;
+                double adjustedY = (event.getY() / scale) + pcursor.mouseAnchorY;
+
+                pcursor.MostrarFuturoBloque(pcursor.ColorBloque,pcursor.ancho);
+                pcursor.setPosition(adjustedX, adjustedY);
+                event.consume();
+            } else {
+                pcursor.OcultarFuturoBloque();
+            }
+        });
 
 
         BorderPane layout = new BorderPane();
@@ -194,8 +212,10 @@ public class GridController implements Initializable {
             if (event.getCode() == KeyCode.DELETE) { // Cambiado de KeyCode.BACK_SPACE a KeyCode.DELETE
                 // Verificar si hay bloques seleccionados para eliminar
                 if (!bloquesSeleccionados.isEmpty()) {
-                    for (Bloque bloque : bloquesSeleccionados) {
-                        eliminarBloque(bloque);
+                    for (Bloque b : bloquesSeleccionados) {
+                        if (b.conectado != null) b.conectado.Desconectar();
+                        if (b.conectadov != null) b.conectadov.Desconectar();
+                        eliminarBloque(b);
                     }
                     bloquesSeleccionados.clear();
                 }
@@ -306,8 +326,20 @@ public class GridController implements Initializable {
      */
     public void hacerBloqueMovible(Bloque b) {
         b.setOnMousePressed(event -> {
-            b.mouseAnchorX = event.getX() * scale + Grid.getTranslateX();
-            b.mouseAnchorY = event.getY() * scale + Grid.getTranslateY();
+            // Calcular la posición anclada inicial del objeto con respecto al mouse
+            b.mouseAnchorX = event.getSceneX() / scale - b.getX();
+            b.mouseAnchorY = event.getSceneY() / scale - b.getY();
+            event.consume();
+        });
+
+        b.setOnMouseDragged(event -> {
+            // Calcular la nueva posición del objeto ajustando por el anclaje y el zoom
+            double adjustedX = (event.getSceneX() / scale) - b.mouseAnchorX;
+            double adjustedY = (event.getSceneY() / scale) - b.mouseAnchorY;
+
+            b.setPosicion(adjustedX, adjustedY);
+            b.toFront(); // Llevar el objeto al frente
+            pintarPreBloque(b); // Lógica adicional según tu aplicación
             event.consume();
         });
 
@@ -319,13 +351,7 @@ public class GridController implements Initializable {
             event.consume();
         });
 
-        b.setOnMouseDragged(event -> {
-            b.setPosicion((event.getSceneX()) - b.mouseAnchorX, (event.getSceneY()) - b.mouseAnchorY);
-            b.setPosicion(b.getX() / scale, b.getY() / scale);
-            b.toFront();
-            pintarPreBloque(b);
-            event.consume();
-        });
+
 
         b.setOnMouseReleased(event -> {
             b.Soltado();
