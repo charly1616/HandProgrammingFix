@@ -188,41 +188,40 @@ public class GridController implements Initializable {
             }
         });
 
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueMostrar(1500.0, 360.0); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueWhile(1720.0, 720.0); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueFor(1500.0, 720.0); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueIF(1500.0, 580.0); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueElif(1720.0, 580.0); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueElse(1720.0, 220.0); }
-//
-//        for (int i = 0; i < 20; i++) { creadorb.BloqueValor(1500.0, 240.0,""); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloqueVariable(1500.0, 120.0,""); }
-//
-//        for (int i = 0; i < 10; i++) { creadorb.BloquePedir(1720.0, 360.0); }
-//
-//        String[] signos = {"+", "-", "x", "^", "/", "%"};
-//
-//        for (int j = 0; j < signos.length; j++) {
-//            for (int i = 0; i < 10; i++) { creadorb.BloqueOPMAT(100.0 * j, 1000.0, signos[j]); }
-//        }
-//
-//        String[] signos2 = {"=", "!=", ">", "<", "<=", ">="};
-//
-//        for (int j = 0; j < signos2.length; j++) {
-//            for (int i = 0; i < 10; i++) { creadorb.BloqueLMat(100.0 * j, 1100.0, signos2[j]); }
-//        }
-//
-//        String[] signos3 = {"&", "o"};
-//
-//        for (int j = 0; j < signos3.length; j++) {
-//            for (int i = 0; i < 10; i++) { creadorb.BloqueLogico(100.0 * j, 1200.0, signos3[j]); }
-//        }
+        for (int i = 0; i < 10; i++) { creadorb.BloqueMostrar(1500.0, 360.0); }
+
+       for (int i = 0; i < 10; i++) { creadorb.BloqueWhile(1720.0, 720.0); }
+
+        for (int i = 0; i < 10; i++) { creadorb.BloqueFor(1500.0, 720.0); }
+
+        for (int i = 0; i < 10; i++) { creadorb.BloqueIF(1500.0, 580.0); }
+
+       for (int i = 0; i < 10; i++) { creadorb.BloqueElif(1720.0, 580.0); }
+
+        for (int i = 0; i < 10; i++) { creadorb.BloqueElse(1720.0, 220.0); }
+
+
+        for (int i = 0; i < 10; i++) { creadorb.BloqueVariable(1500.0, 120.0,""); }
+
+        for (int i = 0; i < 10; i++) { creadorb.BloquePedir(1720.0, 360.0); }
+
+        String[] signos = {"+", "-", "x", "^", "/", "%"};
+
+        for (int j = 0; j < signos.length; j++) {
+            for (int i = 0; i < 10; i++) { creadorb.BloqueOPMAT(100.0 * j, 1000.0, signos[j]); }
+        }
+
+        String[] signos2 = {"=", "!=", ">", "<", "<=", ">="};
+
+        for (int j = 0; j < signos2.length; j++) {
+           for (int i = 0; i < 10; i++) { creadorb.BloqueLMat(100.0 * j, 1100.0, signos2[j]); }
+        }
+
+        String[] signos3 = {"&", "o"};
+
+        for (int j = 0; j < signos3.length; j++) {
+            for (int i = 0; i < 10; i++) { creadorb.BloqueLogico(100.0 * j, 1200.0, signos3[j]); }
+        }
 
 
 
@@ -579,7 +578,6 @@ public class GridController implements Initializable {
         Hace: Elimina el bloque y sus conexiones del panel y del arrayList
      */
     public void eliminarBloque(Bloque bloque) {
-        // Limpia cualquier conexión que involucre a este bloque
         if (bloque.chorizontal != null) {
             // Elimina el conector horizontal y lo quita de la lista
             Grid.getChildren().remove(bloque.chorizontal);

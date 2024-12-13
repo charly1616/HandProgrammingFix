@@ -147,23 +147,16 @@ public class EvaluadorExpresiones {
         System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
         if (Sep.length == 1) return EvAND(ev);
         String ev1 = EvAND(Sep[0]);
+        if (IsNum(ev1)) ev1 = (Double.parseDouble(ev1) == 0) ? "False":"True";
         if (!IsBool(ev1)) return "";
         for (int i = 1; i < Sep.length; i++) {
             String ev2 = EvAND(Sep[i]);
+            if (IsNum(ev2)) ev2 = (Double.parseDouble(ev2) == 0) ? "False":"True";
             if (!IsBool(ev2)) return "";
             ev1 = (ValBool(ev1) || ValBool(ev2)) + "";
         }
         return ev1;
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -209,12 +202,24 @@ public class EvaluadorExpresiones {
             String nev = EvLogMat(sep[i+1]);
             if (ev1.isEmpty()) return "";
             switch (sep[i]){
-                case "____=____" -> {
-                    ev1 = (ev1.equals(nev))? "True": "False";
+                case "____==____" -> {
+                    if (BloqueValor.esNumero(ev1) && BloqueValor.esNumero(nev)) {
+                        double num1 = Double.parseDouble(ev1);
+                        double num2 = Double.parseDouble(nev);
+                        ev1 = (num1 == num2) ? "True" : "False";
+                        break;
+                    }
+                    else ev1 = (ev1.toLowerCase().equals(nev.toLowerCase()))? "True" : "False";
                     break;
                 }
                 case "____!=____" -> {
-                    ev1 = (!ev1.equals(nev))? "True": "False";
+                    if (BloqueValor.esNumero(ev1) && BloqueValor.esNumero(nev)) {
+                        double num1 = Double.parseDouble(ev1);
+                        double num2 = Double.parseDouble(nev);
+                        ev1 = (num1 == num2) ? "True" : "False";
+                        break;
+                    }
+                    else ev1 = (ev1.toLowerCase().equals(nev.toLowerCase()))? "True" : "False";
                     break;
                 }
             }
