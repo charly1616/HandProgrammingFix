@@ -1,17 +1,16 @@
 package charly.projects.handprogrammingf.Model;
 
+import charly.projects.handprogrammingf.Bloques.*;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Accordion;
 import java.util.Objects;
 
-public class MenuBloques extends VBox{
+public class MenuBloques extends VBox {
 
     private CreadorDeBloques creadorb;
 
@@ -20,13 +19,13 @@ public class MenuBloques extends VBox{
         inicializar();
     }
 
-    public void inicializar(){
+    public void inicializar() {
         setAlignment(javafx.geometry.Pos.TOP_CENTER);
         setPrefHeight(400.0);
         setPrefWidth(70.0);
         setSpacing(12.0);
         this.setLayoutX(20);
-        this.setLayoutY(300);
+        this.setLayoutY(200);
         setStyle("-fx-background-color: #E7E7E7;");
 
         Accordion menuAccordion = new Accordion();
@@ -34,100 +33,65 @@ public class MenuBloques extends VBox{
         // Submenú: Bloques básicos
         VBox bloquesBasicos = new VBox(10);
         bloquesBasicos.getChildren().addAll(
-                createButton("/Images/Buttons/Box.png", "#FFA917", this::crearVar),
-                createButton("/Images/Math/Multiply.png", "#FFFF00", this::creardato),
-                createButton("/Images/Ejecutable/Repeat_1.png", "#A77CE0", this::crearMientras),
-                createButton("/Images/Ejecutable/Share_1.png", "#88DBFF", this::crearIf),
-                createButton("/Images/Ejecutable/Else_1.png", "#8FCFD1", this::crearSino),
-                createButton("/Images/Ejecutable/ElseIf_1.png", "#006400", this::crearSinoSi),
-                createButton("/Images/Ejecutable/For_1.png", "#FF7F50", this::crearPara)
-        );
+                createButton("/Images/Buttons/Box.png", "#FFA917",() -> crearbloque(BloqueVariable.class,0.0,0.0,"")),
+                createButton("/Images/Math/Multiply.png", "#FFFF00", () ->crearbloque(BloqueValor.class,0.0,0.0,"")),
+                createButton("/Images/Ejecutable/Repeat_1.png", "#A77CE0",() -> crearbloque(BloqueWhile.class,0.0,0.0,"")),
+                createButton("/Images/Ejecutable/Share_1.png", "#88DBFF", () ->crearbloque(BloqueIF.class,0.0,0.0,"")),
+                createButton("/Images/Ejecutable/Else_1.png", "#8FCFD1",() -> crearbloque(BloqueElse.class,0.0,0.0,"")),
+                createButton("/Images/Ejecutable/ElseIf_1.png", "#006400", () ->crearbloque(BloqueElif.class,0.0,0.0,"")),
+                createButton("/Images/Ejecutable/For_1.png", "#FF7F50",() -> crearbloque(BloqueFor.class,0.0,0.0,""))
+                );
         TitledPane paneBasicos = new TitledPane("Bloques Básicos", bloquesBasicos);
 
-        // Submenú: Operadores Matemáticos y Lógicos
-        HBox operadores = new HBox(10);
-
+        // Submenú: Operadores Matemáticos
         VBox operadoresMatematicos = new VBox(10);
         operadoresMatematicos.getChildren().addAll(
-                createButton("/Images/Operators/Plus.png", "#CFB5DC", () -> crearOperador("+")),
-                createButton("/Images/Operators/Minus.png", "#CFB5DC", () -> crearOperador("-")),
-                createButton("/Images/Operators/Multiply.png", "#CFB5DC", () -> crearOperador("*")),
-                createButton("/Images/Operators/Power.png", "#CFB5DC", () -> crearOperador("^")),
-                createButton("/Images/Operators/Divide.png", "#CFB5DC", () -> crearOperador("/")),
-                createButton("/Images/Operators/Modulo.png", "#CFB5DC", () -> crearOperador("%")
+                createButton("/Images/Operators/Plus.png", "#C051F7FF", () -> crearbloque(BloqueMat.class,0.0,0.0,"+")),
+                createButton("/Images/Operators/Minus.png", "#C051F7FF", () -> crearbloque(BloqueMat.class,0.0,0.0,"-")),
+                createButton("/Images/Operators/Multiply.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"x")),
+                createButton("/Images/Operators/Power.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"^")),
+                createButton("/Images/Operators/Divide.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"/")),
+                createButton("/Images/Operators/Modulo.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"%"))
+        );
+        TitledPane paneMatematicos = new TitledPane("Operadores Matemáticos", operadoresMatematicos);
 
-
-        ));
-
+        // Submenú: Operadores Lógicos
         VBox operadoresLogicos = new VBox(10);
         operadoresLogicos.getChildren().addAll(
-                createButton("/Images/Operators/Equal.png", "#FFB7A5", () -> crearOperador("==")),
-                createButton("/Images/Operators/NotEqual.png", "#FFB7A5", () -> crearOperador("!=")),
-                createButton("/Images/Operators/Greater.png", "#FFB7A5", () -> crearOperador(">")),
-                createButton("/Images/Operators/Less.png", "#FFB7A5", () -> crearOperador("<")),
-                createButton("/Images/Operators/GreaterEqual.png", "#FFB7A5", () -> crearOperador(">=")),
-                createButton("/Images/Operators/LessEqual.png", "#FFB7A5", () -> crearOperador("<=")),
-                createButton("/Images/Operators/And.png", "#FFB7A5", () -> crearOperador("&&")),
-                createButton("/Images/Operators/Or.png", "#FFB7A5", () -> crearOperador("||"))
+                createButton("/Images/Operators/Equal.png", "#8E22BB", () -> crearbloque(BloqueLMat.class,0.0,0.0,"=")),
+                createButton("/Images/Operators/NotEqual.png", "#8E22BB", () -> crearbloque(BloqueLMat.class,0.0,0.0,"!=")),
+                createButton("/Images/Operators/Greater.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,">")),
+                createButton("/Images/Operators/Less.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,"<")),
+                createButton("/Images/Operators/GreaterEqual.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,">=")),
+                createButton("/Images/Operators/LessEqual.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,"<=")),
+                createButton("/Images/Operators/And.png", "FF6AC2FF", () ->  crearbloque(BloqueLogico.class,0.0,0.0,"&")),
+                createButton("/Images/Operators/Or.png", "FF6AC2FF", () ->  crearbloque(BloqueLogico.class,0.0,0.0,"o"))
         );
-
-        operadores.getChildren().addAll(operadoresMatematicos, operadoresLogicos);
-        TitledPane paneOperadores = new TitledPane("Operadores", operadores);
+        TitledPane paneLogicos = new TitledPane("Operadores Lógicos\n LógicosMatemáticos", operadoresLogicos);
 
         // Submenú: Entrada/Salida
         VBox entradaSalida = new VBox(10);
         entradaSalida.getChildren().addAll(
-                createButton("/Images/Buttons/Export.png", "#FF6D87", this::crearMostrar),
-                createButton("/Images/Buttons/Input.png", "#7EAA00", this::crearPedir)
+
+                createButton("/Images/Buttons/Export.png", "#FF6D87", () -> crearbloque(BloqueMostrar.class,0.0,0.0,"")),
+                createButton("/Images/Buttons/Input.png", "#7EAA00", () ->crearbloque(BloquePedir.class,0.0,0.0,""))
         );
         TitledPane paneEntradaSalida = new TitledPane("Entrada/Salida", entradaSalida);
 
         // Agregar todos los submenús al acordeón
-        menuAccordion.getPanes().addAll(paneBasicos, paneOperadores, paneEntradaSalida);
+        menuAccordion.getPanes().addAll(paneBasicos, paneMatematicos, paneLogicos, paneEntradaSalida);
         menuAccordion.setPrefWidth(60.0);
 
         getChildren().add(menuAccordion);
         setPadding(new Insets(10.0));
     }
 
-    private void crearMientras() {
-        creadorb.BloqueWhile(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
 
-    private void creardato() {
-        creadorb.BloqueValor(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY(), "");
-    }
-
-    private void crearVar() {
-        creadorb.BloqueVariable(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY(), "");
-    }
-
-    private void crearMostrar() {
-        creadorb.BloqueMostrar(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
-
-    private void crearIf() {
-        creadorb.BloqueIF(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
-
-    private void crearSino() {
-        creadorb.BloqueElse(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
-
-    private void crearSinoSi() {
-        creadorb.BloqueElif(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
-
-    private void crearPara() {
-        creadorb.BloqueFor(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
-
-    private void crearPedir() {
-        creadorb.BloquePedir(400.0 - (int)creadorb.cuadricula.Grid.getTranslateY(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY());
-    }
-
-    private void crearOperador(String operador) {
-        creadorb.BloqueLogico(400.0 - (int)creadorb.cuadricula.Grid.getTranslateX(), 400.0 - (int)creadorb.cuadricula.Grid.getTranslateY(), operador);
+    private void crearbloque(Class<?extends Bloque>a, Double x, Double y, String string){
+        String pre=FileSaver.prefixBloques.get(a);
+        x=400.0 - (int) creadorb.cuadricula.Grid.getTranslateX(); y=400.0 - (int) creadorb.cuadricula.Grid.getTranslateY();
+        Double [] array  = {x,y};
+        FileSaver.FunctionsBloques.get(pre).apply(array, string);
     }
 
     private Button createButton(String imageUrl, String backgroundColor, Runnable action) {

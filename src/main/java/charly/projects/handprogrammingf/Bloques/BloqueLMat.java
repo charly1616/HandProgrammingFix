@@ -11,9 +11,10 @@ import javafx.scene.paint.Color;
  * @author User
  */
 public class BloqueLMat extends BloqueOP{
-    
+
+    public static final Color colordelbloquecomotal =Color.rgb(123, 62, 221);
     public BloqueLMat(double x, double y, String sign) {
-        super(x, y, sign, Color.rgb(123, 62, 221));
+        super(x, y, sign, colordelbloquecomotal);
     }
-    
+
 }
