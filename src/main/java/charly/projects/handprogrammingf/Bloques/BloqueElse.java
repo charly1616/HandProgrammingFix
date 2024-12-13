@@ -2,6 +2,7 @@
 package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.scene.paint.Color;
 
 /**
@@ -9,9 +10,11 @@ import javafx.scene.paint.Color;
  * @author juand
  */
 public class BloqueElse extends BloqueCondicional{
-    
+
+
     public BloqueElse(double x, double y) {
-        super(x, y, "Sino", Color.rgb(50, 229, 205));
+        super(x, y, ConstantesDeBloques.NombresBloques.get(BloqueElse.class)[ConstantesDeBloques.IdiomaSeleccionado],
+                ConstantesDeBloques.ColoresBloques.get(BloqueElse.class));
         setID(IDBloqueMax);
         this.DesactivarHorizontal();
     }

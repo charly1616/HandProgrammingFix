@@ -2,13 +2,16 @@
 package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.scene.paint.Color;
 
 
 public class BloqueElif extends BloqueCondicional{
-    
+
+
     public BloqueElif(double x, double y) {
-        super(x, y, "Sino Si", Color.rgb(3, 156, 110));
+        super(x, y, ConstantesDeBloques.NombresBloques.get(BloqueElif.class)[ConstantesDeBloques.IdiomaSeleccionado],
+                ConstantesDeBloques.ColoresBloques.get(BloqueElif.class));
     }
     
     

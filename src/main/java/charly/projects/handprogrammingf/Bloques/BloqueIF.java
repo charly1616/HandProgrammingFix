@@ -1,13 +1,18 @@
 package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.scene.paint.Color;
 
+import java.util.concurrent.CompletionService;
+
 public class BloqueIF extends BloqueCondicional {
 
+
     public BloqueIF(double x, double y) {
-        super(x, y, "Si", Color.rgb(135, 206, 235));
+        super(x, y, ConstantesDeBloques.NombresBloques.get(BloqueIF.class)[ConstantesDeBloques.IdiomaSeleccionado],
+                ConstantesDeBloques.ColoresBloques.get(BloqueIF.class));
     }
     /*
     Verifica si el bloque actual (BloqueIF) tiene un bloque siguiente (Siguiente()) y si la condición asociada a ese bloque 

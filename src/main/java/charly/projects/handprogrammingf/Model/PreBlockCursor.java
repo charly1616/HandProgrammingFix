@@ -13,7 +13,7 @@ public class PreBlockCursor extends Pane {
     public double x;
     public double y;
 
-    public double ancho = 100;
+    public double ancho = 80;
     public Color ColorBloque = Color.WHITE;
     public Color ColorBorde = Color.BLACK;
     public double TamBorde = 4;

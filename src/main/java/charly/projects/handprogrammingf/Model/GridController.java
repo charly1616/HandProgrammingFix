@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -59,10 +60,11 @@ public class GridController implements Initializable {
 
     public Stage stage = null;
 
-    private List<Bloque> bloquesSeleccionados = new ArrayList<>();
+    private final List<Bloque> bloquesSeleccionados = new ArrayList<>();
+    public static Color pCursorColor = Color.WHITE;
 
 
-    public BiFunction<Double[],String,Bloque> functionCreadora = null;
+    public BiFunction<Double,Double,Bloque> functionCreadora = null;
     public final PreBlockCursor pcursor = new PreBlockCursor(0,0);
 
 
@@ -111,7 +113,7 @@ public class GridController implements Initializable {
                 double adjustedX = (event.getX() / scale) + pcursor.mouseAnchorX;
                 double adjustedY = (event.getY() / scale) + pcursor.mouseAnchorY;
 
-                pcursor.MostrarFuturoBloque(pcursor.ColorBloque,pcursor.ancho);
+                pcursor.MostrarFuturoBloque(pCursorColor,pcursor.ancho);
                 pcursor.setPosition(adjustedX, adjustedY);
                 event.consume();
             } else {
@@ -201,6 +203,11 @@ public class GridController implements Initializable {
 
                 if (!clicEnBloqueOPunto) {
                     // Si no se hizo clic en un bloque ni un punto, deseleccionar todos los bloques
+                    if (functionCreadora != null){
+                        functionCreadora.apply(pcursor.getLayoutX(),pcursor.getLayoutY());
+                        functionCreadora = null;
+
+                    }
                     deseleccionarBloques();
                 }
             }
@@ -554,7 +561,7 @@ public class GridController implements Initializable {
             Grid.getChildren().add(p.cvertical);
             p.cvertical.fixPosicion();
         }
-        if (p.cvertical.inner != null) {
+        if (p.cvertical != null && p.cvertical.inner != null) {
             Grid.getChildren().add(p.cvertical.inner);
             p.cvertical.inner.fixPosicion();
         }

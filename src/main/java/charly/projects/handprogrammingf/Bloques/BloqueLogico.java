@@ -4,6 +4,7 @@
  */
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.scene.paint.Color;
 
 /**
@@ -13,7 +14,7 @@ import javafx.scene.paint.Color;
 public class BloqueLogico extends BloqueOP{
     
     public BloqueLogico(double x, double y, String sign) {
-        super(x, y, sign, Color.rgb(255, 106, 194));
+        super(x, y, sign, ConstantesDeBloques.ColoresBloques.get(BloqueLogico.class));
     }
     
     

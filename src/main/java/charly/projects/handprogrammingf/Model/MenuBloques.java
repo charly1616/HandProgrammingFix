@@ -3,12 +3,18 @@ package charly.projects.handprogrammingf.Model;
 import charly.projects.handprogrammingf.Bloques.*;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Accordion;
+import javafx.scene.paint.Color;
+
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class MenuBloques extends VBox {
 
@@ -22,7 +28,7 @@ public class MenuBloques extends VBox {
     public void inicializar() {
         setAlignment(javafx.geometry.Pos.TOP_CENTER);
         setPrefHeight(400.0);
-        setPrefWidth(70.0);
+        setPrefWidth(100.0);
         setSpacing(12.0);
         this.setLayoutX(20);
         this.setLayoutY(200);
@@ -30,52 +36,61 @@ public class MenuBloques extends VBox {
 
         Accordion menuAccordion = new Accordion();
 
+        Function<Class<? extends Bloque>,String> TextoBloque = (cla) -> ConstantesDeBloques.NombresBloques.get(cla)[ConstantesDeBloques.IdiomaSeleccionado];
+
+
         // Submenú: Bloques básicos
         VBox bloquesBasicos = new VBox(10);
         bloquesBasicos.getChildren().addAll(
-                createButton("/Images/Buttons/Box.png", "#FFA917",() -> crearbloque(BloqueVariable.class,0.0,0.0,""),"Var"),
-                createButton("/Images/Math/Multiply.png", "#FFFF00", () ->crearbloque(BloqueValor.class,0.0,0.0,""),"Dato"),
-                createButton("/Images/Ejecutable/Repeat_1.png", "#A77CE0",() -> crearbloque(BloqueWhile.class,0.0,0.0,""),"Mientras"),
-                createButton("/Images/Ejecutable/Share_1.png", "#88DBFF", () ->crearbloque(BloqueIF.class,0.0,0.0,""),"Si"),
-                createButton("/Images/Ejecutable/Else_1.png", "#8FCFD1",() -> crearbloque(BloqueElse.class,0.0,0.0,""),"Sino"),
-                createButton("/Images/Ejecutable/ElseIf_1.png", "#006400", () ->crearbloque(BloqueElif.class,0.0,0.0,""),"Sinosi"),
-                createButton("/Images/Ejecutable/For_1.png", "#FF7F50",() -> crearbloque(BloqueFor.class,0.0,0.0,""),"Para"));
-        TitledPane paneBasicos = new TitledPane("Bloques Básicos", bloquesBasicos);
-
+                createButton("/Images/Buttons/Box.png", BloqueVariable.class,
+                        TextoBloque.apply(BloqueVariable.class)),
+                createButton("/Images/Math/Multiply.png", BloqueValor.class,
+                        TextoBloque.apply(BloqueValor.class)),
+                createButton("/Images/Ejecutable/Repeat_1.png", BloqueWhile.class,
+                        TextoBloque.apply(BloqueWhile.class)),
+                createButton("/Images/Ejecutable/Share_1.png", BloqueIF.class,
+                        TextoBloque.apply(BloqueIF.class)),
+                createButton("/Images/Ejecutable/Else_1.png", BloqueElse.class,
+                        TextoBloque.apply(BloqueElse.class)),
+                createButton("/Images/Ejecutable/ElseIf_1.png", BloqueElif.class,
+                        TextoBloque.apply(BloqueElif.class)),
+                createButton("/Images/Ejecutable/For_1.png", BloqueFor.class,
+                        TextoBloque.apply(BloqueFor.class)));
+        TitledPane paneBasicos = new TitledPane(TextoBloque.apply(Bloque.class), bloquesBasicos);
         // Submenú: Operadores Matemáticos
         VBox operadoresMatematicos = new VBox(10);
         operadoresMatematicos.getChildren().addAll(
-                createButton("/Images/Operators/Plus.png", "#C051F7FF", () -> crearbloque(BloqueMat.class,0.0,0.0,"+"),"+"),
-                createButton("/Images/Operators/Minus.png", "#C051F7FF", () -> crearbloque(BloqueMat.class,0.0,0.0,"-"),"-"),
-                createButton("/Images/Operators/Multiply.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"x"),"x"),
-                createButton("/Images/Operators/Power.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"^"),"^"),
-                createButton("/Images/Operators/Divide.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"/"),"/"),
-                createButton("/Images/Operators/Modulo.png", "#C051F7FF",  () -> crearbloque(BloqueMat.class,0.0,0.0,"%"),"%")
+                createButton("/Images/Operators/Plus.png", BloqueMat.class,"+"),
+                createButton("/Images/Operators/Minus.png", BloqueMat.class,"-"),
+                createButton("/Images/Operators/Multiply.png", BloqueMat.class,"x"),
+                createButton("/Images/Operators/Power.png", BloqueMat.class,"^"),
+                createButton("/Images/Operators/Divide.png", BloqueMat.class,"/"),
+                createButton("/Images/Operators/Modulo.png", BloqueMat.class,"%")
         );
-        TitledPane paneMatematicos = new TitledPane("Operadores Matemáticos", operadoresMatematicos);
+        TitledPane paneMatematicos = new TitledPane(TextoBloque.apply(BloqueMat.class), operadoresMatematicos);
 
         // Submenú: Operadores Lógicos
         VBox operadoresLogicos = new VBox(10);
         operadoresLogicos.getChildren().addAll(
-                createButton("/Images/Operators/Equal.png", "#8E22BB", () -> crearbloque(BloqueLMat.class,0.0,0.0,"="),"="),
-                createButton("/Images/Operators/NotEqual.png", "#8E22BB", () -> crearbloque(BloqueLMat.class,0.0,0.0,"!="),"!="),
-                createButton("/Images/Operators/Greater.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,">"),">"),
-                createButton("/Images/Operators/Less.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,"<"),"<"),
-                createButton("/Images/Operators/GreaterEqual.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,">="),">="),
-                createButton("/Images/Operators/LessEqual.png", "#8E22BB", () ->  crearbloque(BloqueLMat.class,0.0,0.0,"<="),"<="),
-                createButton("/Images/Operators/And.png", "FF6AC2FF", () ->  crearbloque(BloqueLogico.class,0.0,0.0,"&"),"&"),
-                createButton("/Images/Operators/Or.png", "FF6AC2FF", () ->  crearbloque(BloqueLogico.class,0.0,0.0,"o"),"o")
+                createButton("/Images/Operators/Equal.png", BloqueLMat.class,"="),
+                createButton("/Images/Operators/NotEqual.png", BloqueLMat.class,"!="),
+                createButton("/Images/Operators/Greater.png", BloqueLMat.class,">"),
+                createButton("/Images/Operators/Less.png", BloqueLMat.class,"<"),
+                createButton("/Images/Operators/GreaterEqual.png", BloqueLMat.class,">="),
+                createButton("/Images/Operators/LessEqual.png", BloqueLMat.class,"<="),
+                createButton("/Images/Operators/And.png", BloqueLogico.class,"&"),
+                createButton("/Images/Operators/Or.png", BloqueLogico.class,"o")
         );
-        TitledPane paneLogicos = new TitledPane("Operadores Lógicos\n LógicosMatemáticos", operadoresLogicos);
+        TitledPane paneLogicos = new TitledPane(TextoBloque.apply(BloqueLMat.class)+"\n"+ TextoBloque.apply(BloqueLogico.class), operadoresLogicos);
 
         // Submenú: Entrada/Salida
         VBox entradaSalida = new VBox(10);
         entradaSalida.getChildren().addAll(
 
-                createButton("/Images/Buttons/Export.png", "#FF6D87", () -> crearbloque(BloqueMostrar.class,0.0,0.0,""),"Mostrar"),
-                createButton("/Images/Buttons/Input.png", "#7EAA00", () ->crearbloque(BloquePedir.class,0.0,0.0,""),"Pedir")
+                createButton("/Images/Buttons/Export.png", BloqueMostrar.class, TextoBloque.apply(BloqueMostrar.class)),
+                createButton("/Images/Buttons/Input.png", BloquePedir.class, TextoBloque.apply(BloquePedir.class))
         );
-        TitledPane paneEntradaSalida = new TitledPane("Entrada/Salida", entradaSalida);
+        TitledPane paneEntradaSalida = new TitledPane(TextoBloque.apply(null), entradaSalida);
 
         // Agregar todos los submenús al acordeón
         menuAccordion.getPanes().addAll(paneBasicos, paneMatematicos, paneLogicos, paneEntradaSalida);
@@ -86,30 +101,36 @@ public class MenuBloques extends VBox {
     }
 
 
-    private void crearbloque(Class<?extends Bloque>a, Double x, Double y, String string){
-        String pre=FileSaver.prefixBloques.get(a);
-        x=400.0 - (int) creadorb.cuadricula.Grid.getTranslateX(); y=400.0 - (int) creadorb.cuadricula.Grid.getTranslateY();
-        Double [] array  = {x,y};
-        FileSaver.FunctionsBloques.get(pre).apply(array, string);
-    }
 
-    private Button createButton(String imageUrl, String backgroundColor, Runnable action, String signo) {
+    private Button createButton(String imageUrl, Class<? extends Bloque> cla, String signo) {
+        //Color del bloque
+        Function<Color,String> Color2Hex = (co) -> String.format("#%02X%02X%02X", (int) (co.getRed() * 255), (int) (co.getGreen() * 255), (int) (co.getBlue() * 255));
+        Function<Class<? extends Bloque>,String> ColorDeBloque = (c) -> Color2Hex.apply(ConstantesDeBloques.ColoresBloques.get(c));
+        String backgroundColor = ColorDeBloque.apply(cla);
+
+
+
+        //Funcion que se pasa al cursor
+        BiFunction<Double[],String,Bloque> action1 = FileSaver.FunctionsBloques.get(FileSaver.prefixBloques.get(cla));
+        BiFunction<Double,Double,Bloque> action = (du, du2) -> action1.apply(new Double[]{du, du2}, (cla != BloqueValor.class && cla != BloqueVariable.class) ? signo : "");
+
+        //Se le dice a la cuadricula el color del cursor
         Button button = new Button();
-        VBox content = new VBox();
+        HBox content = new HBox();
         content.setSpacing(5); // Espaciado entre imagen y signo
         content.setAlignment(javafx.geometry.Pos.CENTER);
 
         try {
             ImageView i = new ImageView(new Image(Objects.requireNonNull(getClass().getResource(imageUrl)).toExternalForm()));
-            i.setFitHeight(25);
-            i.setFitWidth(25);
+            i.setFitHeight(20);
+            i.setFitWidth(20);
             content.getChildren().add(i);
         } catch (Exception e) {
             System.out.println("Error al cargar imagen: " + imageUrl);
         }
 
-        javafx.scene.control.Label label = new javafx.scene.control.Label(signo);
-        label.setStyle("-fx-text-fill: black; -fx-font-size: 14; -fx-font-weight: bold;");
+        Label label = new Label(signo);
+        label.setStyle("-fx-text-fill: black; -fx-font-size: 12; -fx-font-weight: bold;");
         content.getChildren().add(label);
 
         button.setGraphic(content);
@@ -117,10 +138,13 @@ public class MenuBloques extends VBox {
         button.setMinHeight(Button.USE_PREF_SIZE);
         button.setMinWidth(Button.USE_PREF_SIZE);
         button.setMnemonicParsing(false);
-        button.setPrefHeight(45.0);
-        button.setPrefWidth(76.0);
+        button.setPrefHeight(25.0);
+        button.setPrefWidth(100.0);
         button.setStyle("-fx-background-color: " + backgroundColor + "; -fx-border-radius: 25;");
-        button.setOnAction(e -> action.run());
+        button.setOnAction(e -> {
+            GridController.pCursorColor = ConstantesDeBloques.ColoresBloques.get(cla);
+            creadorb.cuadricula.functionCreadora = action;
+        });
 
         return button;
     }

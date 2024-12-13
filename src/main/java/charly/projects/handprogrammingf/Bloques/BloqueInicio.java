@@ -1,6 +1,7 @@
 
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -28,14 +29,13 @@ public class BloqueInicio extends BloqueEjecutable{
     public Label label;
     public Button boton;
     public Polyline tri;
-    
-    
-    
-    
+
+
+
     public BloqueInicio(double x, double y) {
         super(x,y);
         setID(IDBloqueMax);
-        this.ColorBloque = Color.rgb(86, 255, 114);
+        this.ColorBloque = ConstantesDeBloques.ColoresBloques.get(BloqueInicio.class);
         this.ancho = 160;
         
         IniciarComponentes();
@@ -56,7 +56,7 @@ public class BloqueInicio extends BloqueEjecutable{
         super.IniciarComponentes();
         
         //Creando el Label
-        label = new Label("Inicio");
+        label = new Label(ConstantesDeBloques.NombresBloques.get(BloqueInicio.class)[ConstantesDeBloques.IdiomaSeleccionado]);
         
         //Posicion del label
         label.setLayoutX(62.0);

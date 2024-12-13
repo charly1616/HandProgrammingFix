@@ -1,13 +1,16 @@
 package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane; // Importa la clase para mostrar el diálogo de entrada.
 
 public class BloquePedir extends BloqueLabel {
 
+
     public BloquePedir(double x, double y) {
-        super(x, y, Color.rgb(158, 160, 40),"Pedir");
+        super(x, y, ConstantesDeBloques.ColoresBloques.get(BloquePedir.class)
+                , ConstantesDeBloques.NombresBloques.get(BloquePedir.class)[ConstantesDeBloques.IdiomaSeleccionado]);
         setID(IDBloqueMax);
         this.Inconectableh = true;
         IniciarComponentes();

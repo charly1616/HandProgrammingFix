@@ -72,9 +72,9 @@ public class BloqueLabel extends Bloque {
          Esto es importante para ajustar el tamaño del bloque según el contenido del texto.
         */
 
-        stackPane.setPrefWidth(textWidth + 30);
+        stackPane.setPrefWidth(textWidth + 15);
         stackPane.setPrefHeight(65);
-        setAncho(textWidth + 62);
+        setAncho(textWidth + 20);
         label.setVisible(true);
     }
 }

@@ -1,5 +1,6 @@
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
@@ -9,9 +10,11 @@ import javax.swing.JOptionPane;
  * @author juand
  */
 public class BloqueMostrar extends BloqueLabel {
-    
+
+
     public BloqueMostrar(double x, double y) {
-        super(x, y,  Color.rgb(255, 102, 128), "Mostrar");
+        super(x, y, ConstantesDeBloques.ColoresBloques.get(BloqueMostrar.class)
+                , ConstantesDeBloques.NombresBloques.get(BloqueMostrar.class)[ConstantesDeBloques.IdiomaSeleccionado]);
         this.Inconectableh = true;
     }
     

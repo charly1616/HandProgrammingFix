@@ -5,8 +5,10 @@ import charly.projects.handprogrammingf.Model.ConectorMultiple;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 
@@ -43,11 +45,13 @@ public class BloqueCondicional extends BloqueEjecutable{
         
         
         stackPane = new StackPane();
-        stackPane.setAlignment(Pos.CENTER_RIGHT);
+        stackPane.setAlignment(Pos.CENTER);
 
         label = new Label(Text);
-
+        //stackPane.setBackground(Background.fill(Paint.valueOf("WHITE")));
+        stackPane.setLayoutX(9);
         Font font = new Font("Berlin Sans FB", 35);
+        label.setAlignment(Pos.CENTER);
         label.setFont(font);
 
         stackPane.getChildren().add(label);
@@ -77,9 +81,9 @@ public class BloqueCondicional extends BloqueEjecutable{
         super.Pintar();
         double textWidth = computeTextWidth(label.getFont(), Text);
 
-        stackPane.setPrefWidth(textWidth + 30);
+        stackPane.setPrefWidth(textWidth + 34);
         stackPane.setPrefHeight(65);
-        setAncho(textWidth + 62);
+        setAncho(textWidth + 40);
         label.setVisible(true);
     }
 

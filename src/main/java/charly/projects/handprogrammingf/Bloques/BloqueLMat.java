@@ -4,6 +4,7 @@
  */
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.scene.paint.Color;
 
 /**
@@ -12,9 +13,8 @@ import javafx.scene.paint.Color;
  */
 public class BloqueLMat extends BloqueOP{
 
-    public static final Color colordelbloquecomotal =Color.rgb(123, 62, 221);
     public BloqueLMat(double x, double y, String sign) {
-        super(x, y, sign, colordelbloquecomotal);
+        super(x, y, sign, ConstantesDeBloques.ColoresBloques.get(BloqueLMat.class));
     }
 
 }

@@ -1,6 +1,7 @@
 
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.scene.paint.Color;
 
@@ -10,13 +11,14 @@ public class BloqueVariable extends BloqueTexto{
     
     public String valorVariable = "";
 
+
     public BloqueVariable(double x, double y,String nom) {
-        super(x, y, Color.rgb(255, 165, 0), 250, 15);
+        super(x, y, ConstantesDeBloques.ColoresBloques.get(BloqueVariable.class), 250, 15);
         this.valor.setText(nom);
     }
 
     public BloqueVariable(double x, double y) {
-        super(x, y, Color.rgb(255, 165, 0), 250, 15);
+        super(x, y, ConstantesDeBloques.ColoresBloques.get(BloqueVariable.class), 250, 15);
     }
     
     

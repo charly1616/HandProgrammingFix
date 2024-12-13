@@ -2,6 +2,8 @@ package charly.projects.handprogrammingf.Bloques;
 
 import static charly.projects.handprogrammingf.Bloques.BloqueValor.GetType;
 import static charly.projects.handprogrammingf.Bloques.BloqueValor.esNumero;
+
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -11,8 +13,9 @@ import javafx.scene.paint.Color;
 
 public class BloqueMat extends BloqueOP {
 
+
     public BloqueMat(double x, double y, String signo) {
-        super(x, y, signo, Color.rgb(192, 81, 247));
+        super(x, y, signo, ConstantesDeBloques.ColoresBloques.get(BloqueMat.class));
     }
 
     @Override

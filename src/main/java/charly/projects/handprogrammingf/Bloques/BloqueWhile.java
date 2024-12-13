@@ -2,6 +2,7 @@
 package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.scene.paint.Color;
 
 /**
@@ -9,9 +10,10 @@ import javafx.scene.paint.Color;
  * @author juand
  */
 public class BloqueWhile extends BloqueCondicional{
-    
+
+
     public BloqueWhile(double x, double y) {
-        super(x, y, "Mientras", Color.rgb(147, 120, 201));
+        super(x, y, ConstantesDeBloques.NombresBloques.get(BloqueWhile.class)[ConstantesDeBloques.IdiomaSeleccionado], ConstantesDeBloques.ColoresBloques.get(BloqueWhile.class));
     }
     
     

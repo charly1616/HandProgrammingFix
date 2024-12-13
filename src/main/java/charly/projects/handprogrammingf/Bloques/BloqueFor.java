@@ -2,6 +2,7 @@
 package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,10 +10,10 @@ import javafx.scene.paint.Color;
 
 
 public class BloqueFor extends BloqueCondicional{
-    
-    
+
+
     public BloqueFor(double x, double y) {
-        super(x, y, "Para", Color.rgb(226, 100, 59));
+        super(x, y, ConstantesDeBloques.NombresBloques.get(BloqueFor.class)[ConstantesDeBloques.IdiomaSeleccionado], ConstantesDeBloques.ColoresBloques.get(BloqueFor.class));
     }
     
     @Override

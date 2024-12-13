@@ -3,6 +3,8 @@ package charly.projects.handprogrammingf.Bloques;
 
 import charly.projects.handprogrammingf.Model.Bloque;
 import java.util.HashSet;
+
+import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import javafx.animation.ScaleTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -54,7 +56,7 @@ public abstract class BloqueTexto extends Bloque{
         
         valor = new TextField();
         
-        valor.setPromptText("Dato");
+        valor.setPromptText(ConstantesDeBloques.NombresBloques.get(BloqueValor.class)[ConstantesDeBloques.IdiomaSeleccionado]);
         
         //Posicion del label
         valor.setLayoutX(43);

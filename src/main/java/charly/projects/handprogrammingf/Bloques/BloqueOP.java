@@ -3,7 +3,9 @@ import charly.projects.handprogrammingf.Model.Bloque;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -37,13 +39,15 @@ public class BloqueOP extends Bloque {
         operaciones.setAlignment(Pos.CENTER_LEFT);
         
         //Posicion del label
-        operaciones.setLayoutX(30);
+        operaciones.setLayoutX(9);
         operaciones.setLayoutY(15);
         
         //tamaño del label
         operaciones.setPrefHeight(39); //altura
-        operaciones.setPrefWidth(26); //ancho
-        
+        operaciones.setPrefWidth(46); //ancho
+        operaciones.setAlignment(Pos.CENTER);
+
+        //operaciones.setBackground(Background.fill(Paint.valueOf("WHITE")));
         //Se coloca la fuente
         Font font = Font.font("Berlin Sans FB", FontWeight.NORMAL, 32);
         operaciones.setFont(font);
@@ -53,7 +57,7 @@ public class BloqueOP extends Bloque {
         getChildren().add(operaciones);
         
         // para configurar el ancho del bloque Esto probablemente ajusta el tamaño del bloque para que se ajuste al contenido 
-        setAncho(70);
+        setAncho(50);
     }
     
     /*
