@@ -1,6 +1,7 @@
 package charly.projects.handprogrammingf.Model;
 
 import charly.projects.handprogrammingf.Bloques.*;
+import charly.projects.handprogrammingf.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -71,12 +72,14 @@ public class FileSaver {
             return b.conectadov.conectador.IDBloque;
         } else if (b.conectado != null && b.conectado.conectador != null) {
             return b.conectado.conectador.IDBloque;
+        } else if (b.conectado != null && b.conectado.multiconectador != null && b.conectado.multiconectador.conectador != null){
+            return b.conectado.multiconectador.conectador.IDBloque;
         }
         return 0;
     }
 
     public String ConectionType(Bloque b){
-        if (b.conectado instanceof ConectorMultiple){
+        if (b.conectado != null && b.conectado.multiconectador != null){
             return "=";
         } else if (b.conectado != null){
             return "-";
@@ -222,6 +225,7 @@ public class FileSaver {
                     if (p.chorizontal != null) p.chorizontal.setConexion(bid.getKey());
                 }
                 case "=" -> {
+                    System.out.println("Tratando de conectar el INNER");
                     if (p.cvertical != null && p.cvertical.inner != null)
                         p.cvertical.inner.setConexion(bid.getKey());
                 }
@@ -230,6 +234,8 @@ public class FileSaver {
     }
 
 
+
+    private int MaxID = 0;
     /*
     * Recuerda que cada linea en el archivo.block es de la forma TipoBloque(ID,X,Y,String) y aveces tienen al principio un Numero(Simbolo)...
     * Lo que hace esta funcion es separar la linea en sus componentes, crear el bloque y dejar listo las conexiones que se tienen que hacer
@@ -266,7 +272,8 @@ public class FileSaver {
 
         //Create the Block
         Bloque b = FunctionsBloques.get(BlockType).apply(doubles,value);
-        b.setID((int) Double.parseDouble(Params[0]));
+        if (MaxID == 0) MaxID = Bloque.IDBloqueMax;
+        b.setID((int) Double.parseDouble(Params[0]) + MaxID + 1);
         //System.out.println(Arrays.asList(Params).toString());
 
 
@@ -274,7 +281,7 @@ public class FileSaver {
         bloquesPorID.put(b.IDBloque+0.0,b);
         //If needed, add the block to the Conection pool
         if (!symbol.isEmpty()){
-            bloquesAConectar.add(new Pair<>(b,number+0.0));
+            bloquesAConectar.add(new Pair<>(b,number+MaxID+1.0));
             bloquesCTypes.add(symbol);
         }
     }

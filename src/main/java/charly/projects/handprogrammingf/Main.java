@@ -22,7 +22,7 @@ import javax.swing.*;
 public class  Main extends Application {
     
     
-    boolean ModoDePruebaDeEvaluadorDeExpresiones2000 = true;
+    boolean ModoDePruebaDeEvaluadorDeExpresiones2000 = false;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
