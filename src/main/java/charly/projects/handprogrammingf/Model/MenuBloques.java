@@ -46,7 +46,7 @@ public class MenuBloques extends VBox {
                         TextoBloque.apply(BloqueVariable.class)),
                 createButton("/Images/Buttons/Tags_3.png", BloqueValor.class,
                         TextoBloque.apply(BloqueValor.class)),
-                createButton("/Images/Buttons/Repeat_1.png", BloqueWhile.class,
+                createButton("/Images/Buttons/Repeat.png", BloqueWhile.class,
                         TextoBloque.apply(BloqueWhile.class)),
                 createButton("/Images/Buttons/if.png", BloqueIF.class,
                         TextoBloque.apply(BloqueIF.class)),
