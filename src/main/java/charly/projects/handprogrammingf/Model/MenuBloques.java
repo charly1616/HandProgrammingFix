@@ -44,42 +44,42 @@ public class MenuBloques extends VBox {
         bloquesBasicos.getChildren().addAll(
                 createButton("/Images/Buttons/Box.png", BloqueVariable.class,
                         TextoBloque.apply(BloqueVariable.class)),
-                createButton("/Images/Math/Multiply.png", BloqueValor.class,
+                createButton("/Images/Buttons/Tags_3.png", BloqueValor.class,
                         TextoBloque.apply(BloqueValor.class)),
-                createButton("/Images/Ejecutable/Repeat_1.png", BloqueWhile.class,
+                createButton("/Images/Buttons/Repeat_1.png", BloqueWhile.class,
                         TextoBloque.apply(BloqueWhile.class)),
-                createButton("/Images/Ejecutable/Share_1.png", BloqueIF.class,
+                createButton("/Images/Buttons/if.png", BloqueIF.class,
                         TextoBloque.apply(BloqueIF.class)),
-                createButton("/Images/Ejecutable/Else_1.png", BloqueElse.class,
+                createButton("/Images/Buttons/Else.png", BloqueElse.class,
                         TextoBloque.apply(BloqueElse.class)),
-                createButton("/Images/Ejecutable/ElseIf_1.png", BloqueElif.class,
+                createButton("/Images/Buttons/Multicast.png", BloqueElif.class,
                         TextoBloque.apply(BloqueElif.class)),
-                createButton("/Images/Ejecutable/For_1.png", BloqueFor.class,
+                createButton("/Images/Buttons/For.png", BloqueFor.class,
                         TextoBloque.apply(BloqueFor.class)));
         TitledPane paneBasicos = new TitledPane(TextoBloque.apply(Bloque.class), bloquesBasicos);
         // Submenú: Operadores Matemáticos
         VBox operadoresMatematicos = new VBox(10);
         operadoresMatematicos.getChildren().addAll(
-                createButton("/Images/Operators/Plus.png", BloqueMat.class,"+"),
-                createButton("/Images/Operators/Minus.png", BloqueMat.class,"-"),
-                createButton("/Images/Operators/Multiply.png", BloqueMat.class,"x"),
-                createButton("/Images/Operators/Power.png", BloqueMat.class,"^"),
-                createButton("/Images/Operators/Divide.png", BloqueMat.class,"/"),
-                createButton("/Images/Operators/Modulo.png", BloqueMat.class,"%")
+                createButton("/Images/Math/Plus.png", BloqueMat.class,"+"),
+                createButton("/Images/Math/Subtract.png", BloqueMat.class,"-"),
+                createButton("/Images/Math/Multiply.png", BloqueMat.class,"x"),
+                createButton("/Images/Math/Potencia.png", BloqueMat.class,"^"),
+                createButton("/Images/Math/Divide.png", BloqueMat.class,"/"),
+                createButton("/Images/Math/Percentage.png", BloqueMat.class,"%")
         );
         TitledPane paneMatematicos = new TitledPane(TextoBloque.apply(BloqueMat.class), operadoresMatematicos);
 
         // Submenú: Operadores Lógicos
         VBox operadoresLogicos = new VBox(10);
         operadoresLogicos.getChildren().addAll(
-                createButton("/Images/Operators/Equal.png", BloqueLMat.class,"="),
-                createButton("/Images/Operators/NotEqual.png", BloqueLMat.class,"!="),
-                createButton("/Images/Operators/Greater.png", BloqueLMat.class,">"),
-                createButton("/Images/Operators/Less.png", BloqueLMat.class,"<"),
-                createButton("/Images/Operators/GreaterEqual.png", BloqueLMat.class,">="),
-                createButton("/Images/Operators/LessEqual.png", BloqueLMat.class,"<="),
-                createButton("/Images/Operators/And.png", BloqueLogico.class,"&"),
-                createButton("/Images/Operators/Or.png", BloqueLogico.class,"o")
+                createButton("/Images/Compare/Equals.png", BloqueLMat.class,"="),
+                createButton("/Images/Compare/Unequal.png", BloqueLMat.class,"!="),
+                createButton("/Images/Compare/Greater Than_1.png", BloqueLMat.class,">"),
+                createButton("/Images/Compare/Less Than_1.png", BloqueLMat.class,"<"),
+                createButton("/Images/Compare/Greater_1.png", BloqueLMat.class,">="),
+                createButton("/Images/Compare/Less or Equal.png", BloqueLMat.class,"<="),
+                createButton("/Images/Compare/Ampersand.png", BloqueLogico.class,"&"),
+                createButton("/Images/Compare/O.png", BloqueLogico.class,"o")
         );
         TitledPane paneLogicos = new TitledPane(TextoBloque.apply(BloqueLMat.class)+"\n"+ TextoBloque.apply(BloqueLogico.class), operadoresLogicos);
 
@@ -103,22 +103,20 @@ public class MenuBloques extends VBox {
 
 
     private Button createButton(String imageUrl, Class<? extends Bloque> cla, String signo) {
-        //Color del bloque
-        Function<Color,String> Color2Hex = (co) -> String.format("#%02X%02X%02X", (int) (co.getRed() * 255), (int) (co.getGreen() * 255), (int) (co.getBlue() * 255));
-        Function<Class<? extends Bloque>,String> ColorDeBloque = (c) -> Color2Hex.apply(ConstantesDeBloques.ColoresBloques.get(c));
+        // Color del bloque
+        Function<Color, String> Color2Hex = (co) -> String.format("#%02X%02X%02X", (int) (co.getRed() * 255), (int) (co.getGreen() * 255), (int) (co.getBlue() * 255));
+        Function<Class<? extends Bloque>, String> ColorDeBloque = (c) -> Color2Hex.apply(ConstantesDeBloques.ColoresBloques.get(c));
         String backgroundColor = ColorDeBloque.apply(cla);
 
+        // Función que se pasa al cursor
+        BiFunction<Double[], String, Bloque> action1 = FileSaver.FunctionsBloques.get(FileSaver.prefixBloques.get(cla));
+        BiFunction<Double, Double, Bloque> action = (du, du2) -> action1.apply(new Double[]{du, du2}, (cla != BloqueValor.class && cla != BloqueVariable.class) ? signo : "");
 
 
-        //Funcion que se pasa al cursor
-        BiFunction<Double[],String,Bloque> action1 = FileSaver.FunctionsBloques.get(FileSaver.prefixBloques.get(cla));
-        BiFunction<Double,Double,Bloque> action = (du, du2) -> action1.apply(new Double[]{du, du2}, (cla != BloqueValor.class && cla != BloqueVariable.class) ? signo : "");
-
-        //Se le dice a la cuadricula el color del cursor
         Button button = new Button();
         HBox content = new HBox();
-        content.setSpacing(5); // Espaciado entre imagen y signo
-        content.setAlignment(javafx.geometry.Pos.CENTER);
+        content.setSpacing(18);
+        content.setAlignment(javafx.geometry.Pos.CENTER_LEFT); // Alineación a la izquierda
 
         try {
             ImageView i = new ImageView(new Image(Objects.requireNonNull(getClass().getResource(imageUrl)).toExternalForm()));
@@ -148,4 +146,5 @@ public class MenuBloques extends VBox {
 
         return button;
     }
+
 }

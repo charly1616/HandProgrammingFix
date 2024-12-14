@@ -15,7 +15,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 import javax.swing.*;
 
@@ -57,7 +56,7 @@ public class  Main extends Application {
 
         // Cargar la imagen de fondo
         // System.out.println(getClass().getResource("/Fxml/VentanasFx/ventana.fxml") + "IMAGEN");
-        Image backgroundImage = new Image("/Images/2.jpg");
+        Image backgroundImage = new Image("/Images/welcome!.jpg");
         ImageView backgroundImageView = new ImageView(backgroundImage);
         rootPane.getChildren().add(backgroundImageView);
         

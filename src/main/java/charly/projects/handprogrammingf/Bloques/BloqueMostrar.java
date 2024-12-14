@@ -1,7 +1,9 @@
 package charly.projects.handprogrammingf.Bloques;
 
+import charly.projects.handprogrammingf.Bloques.BloqueLabel;
 import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -53,53 +55,55 @@ public class BloqueMostrar extends BloqueLabel {
     private double yOffset = 0;
 
     public void mostrarVentanaResultado(String resultado) {
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED); // Elimina la barra de título del sistema
+        // Asegúrate de que esto se ejecute en el hilo de aplicación FX
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED); // Elimina la barra de título del sistema
 
-        // Barra de título personalizada
-        Label titulo = new Label("MOSTRAR");
-        titulo.setFont(Font.font("Times new Roman", FontWeight.BOLD, 16));
-        titulo.setTextFill(Color.WHITE);
+            // Barra de título personalizada
+            Label titulo = new Label("MOSTRAR");
+            titulo.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+            titulo.setTextFill(Color.WHITE);
 
-        // Botón de cierre
-        Button btnCerrar = new Button("X");
-        btnCerrar.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        btnCerrar.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 5px;");
-        btnCerrar.setOnAction(e -> stage.close());
+            // Botón de cierre
+            Button btnCerrar = new Button("X");
+            btnCerrar.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            btnCerrar.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 5px;");
+            btnCerrar.setOnAction(e -> stage.close());
 
-        // Contenedor de la barra de título
-        HBox barraTitulo = new HBox(titulo, btnCerrar);
-        barraTitulo.setAlignment(Pos.CENTER);
-        barraTitulo.setStyle("-fx-background-color: #3b5998; -fx-padding: 5px;");
-        HBox.setHgrow(titulo, javafx.scene.layout.Priority.ALWAYS);
-        barraTitulo.setSpacing(10);
+            // Contenedor de la barra de título
+            HBox barraTitulo = new HBox(titulo, btnCerrar);
+            barraTitulo.setStyle("-fx-background-color: #3b5998; -fx-padding: 5px;");
+            HBox.setHgrow(titulo, javafx.scene.layout.Priority.ALWAYS); // El título ocupa el espacio restante
+            barraTitulo.setSpacing(10);
 
-        // Permitir mover la ventana arrastrando la barra personalizada
-        barraTitulo.setOnMousePressed((MouseEvent event) -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
+            // Permitir mover la ventana arrastrando la barra personalizada
+            barraTitulo.setOnMousePressed((MouseEvent event) -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+            barraTitulo.setOnMouseDragged((MouseEvent event) -> {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            });
+
+            // Contenido principal
+            Label contenido = new Label(resultado);
+            contenido.setFont(Font.font("Arial", 14));
+            contenido.setStyle("-fx-padding: 20px; -fx-text-alignment: center;");
+            contenido.setWrapText(true); // Permite que el texto con espacios se ajuste correctamente.
+
+            // Diseño principal
+            BorderPane root = new BorderPane();
+            root.setTop(barraTitulo);
+            root.setCenter(contenido);
+            root.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #3b5998; -fx-border-width: 2px;");
+
+            // Escena
+            Scene scene = new Scene(root, 400, 200);
+            stage.setScene(scene);
+
+            stage.showAndWait();
         });
-        barraTitulo.setOnMouseDragged((MouseEvent event) -> {
-            stage.setX(event.getScreenX() - xOffset);
-            stage.setY(event.getScreenY() - yOffset);
-        });
-
-        // Contenido principal
-        Label contenido = new Label(resultado);
-        contenido.setFont(Font.font("Arial", 14));
-        contenido.setStyle("-fx-padding: 20px; -fx-text-alignment: center;");
-        contenido.setWrapText(true); // Permite que el texto con espacios se ajuste correctamente.
-
-        // Diseño principal
-        BorderPane root = new BorderPane();
-        root.setTop(barraTitulo);
-        root.setCenter(contenido);
-        root.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #3b5998; -fx-border-width: 2px;");
-
-        // Escena
-        Scene scene = new Scene(root, 400, 200);
-        stage.setScene(scene);
-
-        stage.showAndWait();
     }
 }
