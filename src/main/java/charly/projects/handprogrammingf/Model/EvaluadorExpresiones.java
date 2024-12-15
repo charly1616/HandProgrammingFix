@@ -195,14 +195,14 @@ public class EvaluadorExpresiones {
 
     /* Evalua igualdad o desigualdad de los resultados de las subexpresiones*/
     public static String EvLogEquality(String ev){
-        String[] sep = splitWithDelimiters(ev, new String[]{"____==____", "____!=____"});
+        String[] sep = splitWithDelimiters(ev, new String[]{"____=____", "____!=____"});
         if (sep.length == 1) return EvLogMat(ev);
         String ev1 = EvLogMat(sep[0]);
         for (int i = 1; i < sep.length; i+=2) {
             String nev = EvLogMat(sep[i+1]);
             if (ev1.isEmpty()) return "";
             switch (sep[i]){
-                case "____==____" -> {
+                case "____=____" -> {
                     if (BloqueValor.esNumero(ev1) && BloqueValor.esNumero(nev)) {
                         double num1 = Double.parseDouble(ev1);
                         double num2 = Double.parseDouble(nev);

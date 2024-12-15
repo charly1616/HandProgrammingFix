@@ -27,6 +27,7 @@ public class BloqueIF extends BloqueCondicional {
     @Override
     public void Hacer() {
         this.LineaEjecutador();
+
         if (Siguiente() == null) {
             this.chorizontal.NecesitaSiguiente();
             if (SiguienteLinea() != null) {
@@ -37,12 +38,19 @@ public class BloqueIF extends BloqueCondicional {
         }
 
         if (evaluarSiguiente()) {
+            // Ejecutar la lógica del bloque IF
+            System.out.println("EJECUTANDO SUPER");
             super.Hacer();
 
+            if (SiguienteLinea() != null) {
+                SiguienteLinea().ejecutador = ejecutador;
+                SiguienteLinea().Hacer();
+            }
         } else if (SiguienteLinea() != null) {
             this.hacerSiguiente();
             SiguienteLinea().Hacer();
         }
     }
+
 
 }

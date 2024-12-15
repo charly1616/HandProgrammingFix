@@ -1,10 +1,9 @@
 package charly.projects.handprogrammingf.Bloques;
 
-import charly.projects.handprogrammingf.Bloques.BloqueLabel;
+
 import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.application.Platform;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -87,11 +86,12 @@ public class BloqueMostrar extends BloqueLabel {
                 stage.setY(event.getScreenY() - yOffset);
             });
 
-            // Contenido principal
+            //Contenido principal
             Label contenido = new Label(resultado);
             contenido.setFont(Font.font("Arial", 14));
             contenido.setStyle("-fx-padding: 20px; -fx-text-alignment: center;");
             contenido.setWrapText(true); // Permite que el texto con espacios se ajuste correctamente.
+
 
             // Diseño principal
             BorderPane root = new BorderPane();
