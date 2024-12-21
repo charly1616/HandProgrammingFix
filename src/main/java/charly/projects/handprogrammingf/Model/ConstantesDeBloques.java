@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class ConstantesDeBloques {
 
-    public static int IdiomaSeleccionado = 2;
+    public static int IdiomaSeleccionado = 1;
 
 
     public static HashMap<Class<? extends Bloque>, Color> ColoresBloques = new HashMap<>();
@@ -36,7 +36,7 @@ public class ConstantesDeBloques {
         NombresBloques.put(BloqueValor.class, new String[]{"Dato", "Valu", "Valr"});
         NombresBloques.put(BloqueVariable.class, new String[]{"Variable", "Variable", "Variable"});
         NombresBloques.put(BloqueIF.class, new String[]{"Si", "If", "Si"});
-        NombresBloques.put(BloqueElif.class, new String[]{"PeroSi", "ElseIf", "MaisSi"});
+        NombresBloques.put(BloqueElif.class, new String[]{"Sino Si", "Else If", "Sinon Si"});
         NombresBloques.put(BloqueElse.class, new String[]{"Sino", "Else", "Sinon"});
         NombresBloques.put(BloqueMostrar.class, new String[]{"Mostrar", "Show", "Montrer"});
         NombresBloques.put(BloquePedir.class, new String[]{"Pedir", "Input", "Demander"});

@@ -90,10 +90,10 @@ public class GridController implements Initializable {
         Screen pantalla = Screen.getPrimary();
         javafx.geometry.Rectangle2D coordenadas = pantalla.getVisualBounds();
 
-        GridView.setPrefWidth((coordenadas.getMaxX()));
-        GridView.setPrefHeight((coordenadas.getMaxY()));
-        Grid.setPrefWidth(GridView.getWidth());
-        Grid.setPrefHeight(GridView.getHeight());
+        GridView.setMaxWidth((coordenadas.getMaxX()));
+        GridView.setMaxHeight((coordenadas.getMaxY()));
+        Grid.setMaxWidth(GridView.getWidth());
+        Grid.setMaxHeight(GridView.getHeight());
 
         cirs.setScaleX(Grid.getScaleX());
         cirs.setScaleY(Grid.getScaleY());
@@ -126,6 +126,7 @@ public class GridController implements Initializable {
         layout.setLayoutX(0);
         layout.setLayoutY(15);
         MenuBar menuBar = new MenuBar();
+
 
         GridView.getChildren().add(layout);
         Menu file = new Menu("File");

@@ -69,9 +69,11 @@ public class  Main extends Application {
                 new KeyFrame(Duration.seconds(3), event -> {
                     try {
                         FXMLLoader fxm = new FXMLLoader();
-                        Parent mainRoot = fxm.load(getClass().getResource("/Fxml/VentanasFx/ventana.fxml"));
+                        fxm.setLocation(getClass().getResource("/Fxml/VentanasFx/ventana.fxml"));
+                        Parent mainRoot = fxm.load();
                         Scene mainScene = new Scene(mainRoot);
                         Controller c = fxm.getController();
+                        c.stage = primaryStage;
                         primaryStage.setScene(mainScene);
                         primaryStage.setTitle("PROYECTO SISTEMAS");
                     } catch (Exception e) {
