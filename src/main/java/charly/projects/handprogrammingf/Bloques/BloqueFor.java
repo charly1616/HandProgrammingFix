@@ -4,9 +4,10 @@ package charly.projects.handprogrammingf.Bloques;
 import charly.projects.handprogrammingf.Model.Bloque;
 import charly.projects.handprogrammingf.Model.ConstantesDeBloques;
 import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
+import javafx.application.Platform;
+
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.scene.paint.Color;
 
 
 public class BloqueFor extends BloqueCondicional{
@@ -15,93 +16,140 @@ public class BloqueFor extends BloqueCondicional{
     public BloqueFor(double x, double y) {
         super(x, y, ConstantesDeBloques.NombresBloques.get(BloqueFor.class)[ConstantesDeBloques.IdiomaSeleccionado], ConstantesDeBloques.ColoresBloques.get(BloqueFor.class));
     }
-    
+
+    public boolean isIncreaseSet = false;
+    //u ->{ return (u < 5);}
+    public double TheGeneralCounter = 0.0;
+    public BloqueVariable CounterVariable = null;
+    private double TargetValue = 5;
+    public double Change = 1;
+
+
+    @Override
+    public boolean evaluarSiguiente(){
+        int changeSign = (Change<0)?-1:1;
+        if (CounterVariable == null){
+            System.out.println("CONDICION FOR: " + (TheGeneralCounter* changeSign<TargetValue*changeSign));
+            return TheGeneralCounter* changeSign<TargetValue*changeSign;
+        } else {
+            System.out.println("CONDICION FOR: " + (NumberOf(CounterVariable)* changeSign<TargetValue*changeSign));
+            return NumberOf(CounterVariable)* changeSign<TargetValue*changeSign;
+        }
+    }
+
+
+    public void counterIncrease(){
+        if (CounterVariable == null){
+            TheGeneralCounter+=Change;
+        } else {
+            ejecutador.setValor(CounterVariable,NumberOf(CounterVariable)+Change+"");
+        }
+    }
+
     @Override
     public void Hacer(){
         this.LineaEjecutador();
-        if (sig(1) == null) {
-            chorizontal.NecesitaSiguiente();
+        if (Siguiente() == null) this.chorizontal.NecesitaSiguiente();
+
+        //Coloca todas las variables del padre aquí
+        if (ejecutador.variables !=  null) variables.putAll(ejecutador.variables);
+
+        //Incrementa si ya está inicializado
+        if (isIncreaseSet) counterIncrease();
+
+
+        System.out.println(TheGeneralCounter+" : " + TargetValue + "ESTÁ IMPLEMENTADA ? " + isIncreaseSet);
+
+        //Cuando necesita inicializar
+        if (!isIncreaseSet){
+            isIncreaseSet = true;
+
+            //Primer caso solo un numero
+            if (EvaluadorExpresiones.InstBloqueValor(sig(1)) && BloqueValor.GetType(sig(1).getValor()).equals("Num") && sig(2) == null){
+                TheGeneralCounter = 0;
+                TargetValue = NumberOf(sig(1));
+                Change = 1;
+                CounterVariable = null;
+                Hacer();
+            }
+
+            //Segundo caso
+            else if (sig(1) instanceof BloqueVariable && EvaluadorExpresiones.InstBloqueValor(sig(2))
+                    && BloqueValor.GetType(sig(2).getValor()).equals("Num")
+                    && sig(3) == null){
+                TheGeneralCounter = 0;
+                TargetValue = NumberOf(sig(2));
+                ejecutador.setValor((BloqueVariable)sig(1), "0");
+
+                int cambio = (int) NumberOf(sig(2));
+                cambio = Integer.signum(cambio);
+
+                Change = cambio;
+
+                CounterVariable = ((BloqueVariable)sig(1));
+                Hacer();
+            }
+
+
+            //Tercer caso
+            else if (sig(1) instanceof BloqueVariable && EvaluadorExpresiones.InstBloqueValor(sig(2)) && EvaluadorExpresiones.InstBloqueValor(sig(3))
+                    && BloqueValor.GetType(sig(2).getValor()).equals("Num") && BloqueValor.GetType(sig(3).getValor()).equals("Num")
+                    && sig(4) == null){
+
+                TheGeneralCounter = 0;
+                TargetValue = NumberOf(sig(3));
+                ejecutador.setValor((BloqueVariable)sig(1), sig(2).getValor());
+
+                int cambio = (int)(NumberOf(sig(3)) - NumberOf(sig(2)));
+                cambio = Integer.signum(cambio);
+
+                Change = cambio;
+
+                CounterVariable = ((BloqueVariable)sig(1));
+                Hacer();
+            }
+
+
+            //cuarto caso
+            else if (sig(1) instanceof BloqueVariable && EvaluadorExpresiones.InstBloqueValor(sig(2)) && EvaluadorExpresiones.InstBloqueValor(sig(3)) && EvaluadorExpresiones.InstBloqueValor(sig(4))
+                    && BloqueValor.GetType(sig(2).getValor()).equals("Num") && BloqueValor.GetType(sig(3).getValor()).equals("Num") && BloqueValor.GetType(sig(4).getValor()).equals("Num")){
+
+                TheGeneralCounter = 0;
+                TargetValue = NumberOf(sig(3));
+                ejecutador.setValor((BloqueVariable)sig(1), sig(2).getValor());
+
+                double cambio = (NumberOf(sig(3)) - NumberOf(sig(2)));
+                cambio = (cambio>0)? 1 : -1;
+                cambio *= Math.abs(NumberOf(sig(4)));
+
+                Change = cambio;
+
+                CounterVariable = ((BloqueVariable)sig(1));
+                Hacer();
+            }
+            //Sino está mal
+            else{
+                this.ponerRojo(sig(1));
+                isIncreaseSet=false;
+            }
+
+        }
+
+        // Cuando si está inicializado
+        else if (evaluarSiguiente()){
             super.Hacer();
+        }
+
+        //  Cuando ya terminó la vuelta
+        else {
+            if (CounterVariable != null) ejecutador.deleteValor(CounterVariable);
+            isIncreaseSet=false;
+            CounterVariable=null;
             super.vaciarVariables();
-            return;
-        }
-        
-        
-        //Primer caso solo un numero
-        if (EvaluadorExpresiones.InstBloqueValor(sig(1)) && BloqueValor.GetType(sig(1).getValor()).equals("Num") && sig(2) == null){
-            for (int i = 0; i < entero(sig(1)); i++) {
-//                System.out.println(entero(sig(1)));
-                this.setColorBorde(Color.GREENYELLOW);
-                this.setTamBorde(8);
 
-                final Bloque u = this;
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        u.setColorBorde(Color.BLACK);
-                        u.setTamBorde(4);
-
-                        EjecutarHijos();
-
-                    }
-                }, 600);
-            }
+            //Ejecutar lo siguiente
+            hacerSiguiente();
         }
-        
-        //Segundo caso
-        else if (sig(1) instanceof BloqueVariable && EvaluadorExpresiones.InstBloqueValor(sig(2)) 
-                && BloqueValor.GetType(sig(2).getValor()).equals("Num") 
-                && sig(3) == null){
-            
-            int cambio = (int)entero(sig(2));
-            cambio = Integer.signum(cambio);
-            for (ejecutador.setValor((BloqueVariable)sig(1), "0"); entero(sig(1)) * cambio < entero(sig(2)) * cambio ; ejecutador.setValor((BloqueVariable)sig(1), (entero(sig(1))+cambio) + "")) {
-                System.out.println(entero(sig(1)));
-                if (ejecutador.variables !=  null) variables.putAll(ejecutador.variables);
-                this.EjecutarHijos();
-            }
-            ejecutador.deleteValor((BloqueVariable)sig(1));
-        }
-        
-        
-        //Tercer caso
-        else if (sig(1) instanceof BloqueVariable && EvaluadorExpresiones.InstBloqueValor(sig(2)) && EvaluadorExpresiones.InstBloqueValor(sig(3)) 
-                && BloqueValor.GetType(sig(2).getValor()).equals("Num") && BloqueValor.GetType(sig(3).getValor()).equals("Num") 
-                && sig(4) == null){
-            
-            int cambio = (int)(entero(sig(3)) - entero(sig(2)));
-            cambio = Integer.signum(cambio);
-            for (ejecutador.setValor((BloqueVariable)sig(1), sig(2).getValor()); entero(sig(1)) * cambio < entero(sig(3)) * cambio ; ejecutador.setValor((BloqueVariable)sig(1), (entero(sig(1))+cambio) + "")) {
-                System.out.println(entero(sig(1)));
-                if (ejecutador.variables !=  null) variables.putAll(ejecutador.variables);
-                this.EjecutarHijos();
-            }
-            ejecutador.deleteValor((BloqueVariable)sig(1));
-        }
-        
-        
-        //cuarto caso
-        else if (sig(1) instanceof BloqueVariable && EvaluadorExpresiones.InstBloqueValor(sig(2)) && EvaluadorExpresiones.InstBloqueValor(sig(3)) && EvaluadorExpresiones.InstBloqueValor(sig(4))
-                && BloqueValor.GetType(sig(2).getValor()).equals("Num") && BloqueValor.GetType(sig(3).getValor()).equals("Num") && BloqueValor.GetType(sig(4).getValor()).equals("Num")){
-            
-            int cambio = (int)(entero(sig(3)) - entero(sig(2)));
-            cambio = Integer.signum(cambio);
-            cambio *= Math.abs(entero(sig(4)));
-            
-            for (ejecutador.setValor((BloqueVariable)sig(1), sig(2).getValor()); entero(sig(1)) * cambio < entero(sig(3)) * cambio ; ejecutador.setValor((BloqueVariable)sig(1), (entero(sig(1))+cambio) + "")) {
-                System.out.println(entero(sig(1)));
-                if (ejecutador.variables !=  null) variables.putAll(ejecutador.variables);
-                this.EjecutarHijos();
-            }
-            ejecutador.deleteValor((BloqueVariable)sig(1));
-        }
-        
-        else{
-            this.ponerRojo(sig(1));
-        }
-        
-        super.vaciarVariables();
     }
     
     @Override
@@ -110,6 +158,7 @@ public class BloqueFor extends BloqueCondicional{
         limpiarEjecutadores();
         
         //Ejecutar la siguiente linea
+        Hacer();
     }
     
     
@@ -122,7 +171,7 @@ public class BloqueFor extends BloqueCondicional{
         return ac;
     }
     
-    public double entero(Bloque n){
+    public double NumberOf(Bloque n){
         return Double.parseDouble(n.getValor());
     }
     

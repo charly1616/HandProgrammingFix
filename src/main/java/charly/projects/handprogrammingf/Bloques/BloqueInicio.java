@@ -31,7 +31,7 @@ public class BloqueInicio extends BloqueEjecutable{
     public Polyline tri;
 
 
-
+    private boolean isGlobal = true;
     public BloqueInicio(double x, double y) {
         super(x,y);
         setID(IDBloqueMax);
@@ -127,7 +127,10 @@ public class BloqueInicio extends BloqueEjecutable{
     de la implementación específica de la clase BloqueInicio y cómo se relaciona con otros bloques en el programa.
     */
     public void Undir(){
-        
+        //Limpiar la consola
+        Bloque.GlobalController.basicConsole.clearConsole();
+
+
         //Animación de hundimiento visual:
         TranslateTransition transicion = Transicion(TopPart);
         final TranslateTransition transicion1 = Transicion(label);
@@ -159,6 +162,7 @@ public class BloqueInicio extends BloqueEjecutable{
             SiguienteLinea().ejecutador = this;
             SiguienteLinea().Debug();
             SiguienteLinea().Hacer();
+
         }
         transicion1.play();
 

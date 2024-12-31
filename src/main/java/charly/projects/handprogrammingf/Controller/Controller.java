@@ -1,6 +1,7 @@
 
 package charly.projects.handprogrammingf.Controller;
 
+import charly.projects.handprogrammingf.Model.BasicConsole;
 import charly.projects.handprogrammingf.Model.Bloque;
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,8 @@ public class Controller implements Initializable {
     public BorderPane ventana;
 
     public Stage stage = null;
+    public GridController gcontroller;
+    public BasicConsole basicConsole;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -33,6 +36,11 @@ public class Controller implements Initializable {
     }
 
     public void crearCuadricula() {
+
+        //esto es para colocar una variable global a todos los Bloques
+        Bloque.setGlobalController(this);
+
+
         SplitPane split = new SplitPane();
         try {
             FXMLLoader f = new FXMLLoader();
@@ -42,14 +50,16 @@ public class Controller implements Initializable {
 
             split.getItems().add(p);
             g.stage = stage;
+
             //GridController Bcon = f.getController();
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Pane pe = new Pane();
-        pe.setBackground(Background.fill(Paint.valueOf("#689345")));
-        pe.minWidth(200);
-        split.getItems().add(pe);
+        basicConsole = new BasicConsole();
+        basicConsole.controll = this;
+        basicConsole.setBackground(Background.fill(Paint.valueOf("#121212")));
+        basicConsole.minWidth(100);
+        split.getItems().add(basicConsole);
         ventana.setCenter(split);
     }
 

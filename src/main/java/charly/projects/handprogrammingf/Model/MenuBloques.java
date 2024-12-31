@@ -143,6 +143,10 @@ public class MenuBloques extends VBox {
             GridController.pCursorColor = ConstantesDeBloques.ColoresBloques.get(cla);
             creadorb.cuadricula.functionCreadora = action;
         });
+        button.setOnMouseDragged(e -> {
+            GridController.pCursorColor = ConstantesDeBloques.ColoresBloques.get(cla);
+            creadorb.cuadricula.functionCreadora = action;
+        });
 
         return button;
     }

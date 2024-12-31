@@ -191,8 +191,12 @@ public class FileSaver {
         String loadText = "";
         try {
             loadText = Files.readString(Paths.get(filePath));
-        } catch (Exception e){ System.out.println("Archivo no encontrado"); }
+        } catch (Exception e){
+            System.out.println("Archivo no encontrado");
+            return;
+        }
 
+        father.limpiarBloques();
 
         String [] Lines = loadText.split("\\R");
         for (String line : Lines){
@@ -211,7 +215,6 @@ public class FileSaver {
             String type = bloquesCTypes.poll();
             Pair<Bloque,Double> bid = bloquesAConectar.poll();
             assert bid != null;
-            System.out.println(bid.getValue());
             Bloque p = bloquesPorID.get(bid.getValue());
             if (p == null) continue;
 
@@ -225,7 +228,6 @@ public class FileSaver {
                     if (p.chorizontal != null) p.chorizontal.setConexion(bid.getKey());
                 }
                 case "=" -> {
-                    System.out.println("Tratando de conectar el INNER");
                     if (p.cvertical != null && p.cvertical.inner != null)
                         p.cvertical.inner.setConexion(bid.getKey());
                 }

@@ -38,7 +38,7 @@ public class EvaluadorExpresiones {
             String value = Actual.getValor();
 
             if (BloqueOP.isMathOperation(Actual) && !IsNum(last)){
-                System.out.println(last);
+                //System.out.println(last);
                 System.out.println("ERROR DE EXPRESIÓN: Operación matematica con valor diferente de numero: " + last + " No es un numero");
                 Actual.ponerRojo(Actual);
                 return false;
@@ -118,8 +118,8 @@ public class EvaluadorExpresiones {
 
 
         track += last;
-        System.out.println("Texto: " + track);
-        System.out.println("Concatenar texto: " + EvOR(track));
+        //System.out.println("Texto: " + track);
+        //System.out.println("Concatenar texto: " + EvOR(track));
         return EvOR(track);
     }
     
@@ -142,9 +142,8 @@ public class EvaluadorExpresiones {
 
     /* Separa y evalua por separado el valor usando OR */
     public static String EvOR(String ev){
-        ev = ev.replaceAll(" ","");
         String [] Sep = ev.split("____o____");
-        System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
+        //System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
         if (Sep.length == 1) return EvAND(ev);
         String ev1 = EvAND(Sep[0]);
         if (IsNum(ev1)) ev1 = (Double.parseDouble(ev1) == 0) ? "False":"True";
@@ -162,9 +161,8 @@ public class EvaluadorExpresiones {
 
     /* Separa y evalua por separado el valor usando AND */
     public static String EvAND(String ev){
-        ev = ev.replaceAll(" ","");
         String [] Sep = ev.split("____&____");
-        System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
+        //System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
         if (Sep.length == 1) return EvLogEquality(ev);
         String ev1 = EvLogEquality(Sep[0]);
         if (IsNum(ev1)) ev1 = (Double.parseDouble(ev1) == 0) ? "False":"True";
@@ -209,17 +207,17 @@ public class EvaluadorExpresiones {
                         ev1 = (num1 == num2) ? "True" : "False";
                         break;
                     }
-                    else ev1 = (ev1.toLowerCase().equals(nev.toLowerCase()))? "True" : "False";
+                    else ev1 = (ev1.equalsIgnoreCase(nev))? "True" : "False";
                     break;
                 }
                 case "____!=____" -> {
                     if (BloqueValor.esNumero(ev1) && BloqueValor.esNumero(nev)) {
                         double num1 = Double.parseDouble(ev1);
                         double num2 = Double.parseDouble(nev);
-                        ev1 = (num1 == num2) ? "True" : "False";
+                        ev1 = (num1 != num2) ? "True" : "False";
                         break;
                     }
-                    else ev1 = (ev1.toLowerCase().equals(nev.toLowerCase()))? "True" : "False";
+                    else ev1 = (ev1.equalsIgnoreCase(nev))? "True" : "False";
                     break;
                 }
             }
@@ -333,7 +331,7 @@ public class EvaluadorExpresiones {
         if (Sep.length == 1) {
             return EvMatMult(Sep[0]);
         }
-        System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
+        //System.out.println(Arrays.toString(Arrays.stream(Sep).toArray()));
         double result = 0.0;
         boolean isPositive = true;
 
@@ -385,7 +383,7 @@ public class EvaluadorExpresiones {
         if (Sep.length == 1) {
             return EvMatPot(Sep[0]);
         }
-        System.out.println("Separation   "+Sep[0]);
+        //System.out.println("Separation   "+Sep[0]);
         double result = Double.parseDouble(EvMatPot(Sep[0]));
 
         for (int i = 1; i < Sep.length; i++) {

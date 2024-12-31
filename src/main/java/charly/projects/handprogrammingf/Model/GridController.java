@@ -2,16 +2,16 @@ package charly.projects.handprogrammingf.Model;
 
 import charly.projects.handprogrammingf.Bloques.BloqueInicio;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
@@ -142,6 +142,7 @@ public class GridController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 fileSaver.LoadFile();
+                organizarBloques();
             }
         });
 
@@ -635,7 +636,22 @@ public class GridController implements Initializable {
         Grid.getChildren().remove(bloque);
         bloques.remove(bloque);
     }
-    
+
+
+    public void limpiarBloques(){
+        for (Bloque b: bloques){
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        eliminarBloque(b);
+                    });
+                }
+            }, 1);
+        }
+        bloques.clear();
+    }
     
     
     

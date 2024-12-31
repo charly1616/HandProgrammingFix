@@ -27,7 +27,9 @@ public class BloquePedir extends BloqueLabel {
         super.Pintar();
     }
     
-    
+
+
+    private BloqueVariable currentVariable;
     @Override
     public void Hacer(){
         this.LineaEjecutador();
@@ -47,19 +49,18 @@ public class BloquePedir extends BloqueLabel {
         //Si hay mas bloques innecesarios se colocan en rojo
         if (bloqueVariable.Siguiente() != null) this.ponerRojo(bloqueVariable.Siguiente());
         
-        
-        capturarValor((BloqueVariable) bloqueVariable);
-        super.Hacer();
+
+        currentVariable = (BloqueVariable) bloqueVariable;
+        Bloque.GlobalController.basicConsole.createInput(this);
     }
     
     
-    public void capturarValor(BloqueVariable bloqueVariable) {
-        // Utiliza JOptionPane para mostrar un cuadro de diálogo de entrada y capturar un valor.
-        String valor = JOptionPane.showInputDialog("Ingrese un valor:");
-        
+    public void capturarValor(String s) {
+
         // Verifica si el usuario no canceló el diálogo.
-        if (valor != null) {
-            bloqueVariable.setValor(valor);
+        if (s != null) {
+            currentVariable.setValor(s);
         }
+        hacerSiguiente();
     }
 }

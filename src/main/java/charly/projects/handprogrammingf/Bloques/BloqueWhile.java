@@ -42,13 +42,7 @@ public class BloqueWhile extends BloqueCondicional{
         if (evaluarSiguiente()){
             super.Hacer();
         } else {
-            Bloque b = SiguienteLinea();
-            if (b == null){
-                ejecutador.vaciarVariables();
-                return;
-            }
-            b.ejecutador = ejecutador;
-            b.Hacer();
+            hacerSiguiente();
         }
     }
     

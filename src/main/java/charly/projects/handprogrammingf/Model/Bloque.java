@@ -8,6 +8,8 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import charly.projects.handprogrammingf.Controller.Controller;
 import javafx.animation.FillTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
@@ -66,7 +68,10 @@ public class Bloque extends Pane{
     
     public boolean Inconectableh; //No se puede conectar a otros
     public boolean Inconectablev;
-    
+
+
+    public static Controller GlobalController = null;
+
     //Constructor
     public Bloque(double x, double y, Color ColorBloque) {
         setID(IDBloqueMax);
@@ -101,7 +106,12 @@ public class Bloque extends Pane{
         this.ColorBorde = Bloque.ColorBordeGlobal;
         this.TamBorde = 4;
     }
-    
+
+    public static void setGlobalController(Controller gc){
+        if (GlobalController == null){
+            GlobalController = gc;
+        }
+    }
     
     
     public void IniciarComponentes(){
