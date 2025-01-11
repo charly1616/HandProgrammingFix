@@ -76,10 +76,8 @@ while True:
                 mouse_control = True
                 pyautogui.scroll(150)
 
-    # Comenta o elimina la línea que muestra la cámara en una ventana
-    # cv2.imshow('Handtracker', cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('x'):
         break
 
 cap.release()
