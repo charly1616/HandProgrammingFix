@@ -5,7 +5,6 @@ import charly.projects.handprogrammingf.Model.EvaluadorExpresiones;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-//import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,33 +16,35 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
-public class  Main extends Application {
-    
-    
+public class Main extends Application {
+
     boolean ModoDePruebaDeEvaluadorDeExpresiones2000 = false;
-    
+    private static Process pythonProcess; // Variable compartida para el proceso de Python
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Crear una escena con StackPane para superponer el fondo
         StackPane rootPane = new StackPane();
         Scene loadingScene = new Scene(rootPane);
 
-
         if (ModoDePruebaDeEvaluadorDeExpresiones2000) {
             JTextArea textArea = new JTextArea(15, 60);
             JScrollPane scrollPane = new JScrollPane(textArea);
             JOptionPane.showConfirmDialog(null, scrollPane,
-                    "Ingresar las pruebas a realizar en diferentes lineas", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE);
-            String [] evs = textArea.getText().split("\\n");
+                    "Ingresar las pruebas a realizar en diferentes líneas", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+            String[] evs = textArea.getText().split("\\n");
             StringBuilder finalRes = new StringBuilder();
             for (String ev : evs) {
                 String res = EvaluadorExpresiones.EvOR(ev);
                 finalRes.append(res).append("\n");
             }
-            JOptionPane.showMessageDialog(null,finalRes.toString(),"Respuestas",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, finalRes.toString(), "Respuestas", JOptionPane.PLAIN_MESSAGE);
             return;
         }
+
         // Configurar el tamaño de la ventana de carga para que ocupe toda la pantalla
         Screen pantalla = Screen.getPrimary();
         javafx.geometry.Rectangle2D coordenadas = pantalla.getVisualBounds();
@@ -55,11 +56,10 @@ public class  Main extends Application {
         primaryStage.setScene(loadingScene);
 
         // Cargar la imagen de fondo
-        // System.out.println(getClass().getResource("/Fxml/VentanasFx/ventana.fxml") + "IMAGEN");
         Image backgroundImage = new Image("/Images/welcome!.jpg");
         ImageView backgroundImageView = new ImageView(backgroundImage);
         rootPane.getChildren().add(backgroundImageView);
-        
+
         primaryStage.show();
 
         // Simular la carga gradual con una animación
@@ -84,54 +84,61 @@ public class  Main extends Application {
                     }
                 })
         );
-        
-        
+
         timeline.setCycleCount(1); // Ejecutar una vez
         timeline.play();
+
+        // Configurar el evento de cierre para detener el proceso de Python
+        primaryStage.setOnCloseRequest(event -> {
+            if (pythonProcess != null && pythonProcess.isAlive()) {
+                System.out.println("Cerrando proceso de Python...");
+                pythonProcess.destroy(); // Detener el proceso de Python
+            }
+        });
     }
 
     public static void main(String[] args) {
+        // Ejecutar el script de Python en un hilo en segundo plano
+        Thread pythonThread = new Thread(() -> {
+            try {
+                // Ruta completa al script de Python
+                String scriptPath = "C:/Users/juand/IdeaProjects/HandProgrammingFix/Py/PythonCod.py"; // Ruta al archivo Python
 
+                // Ruta al intérprete de Python (asegúrate de que sea válida)
+                String[] command = {"C:/Users/juand/AppData/Local/Programs/Python/Python310/python.exe", scriptPath};
 
-        try {
-            // Ruta al script de Python
-            //String scriptPath = "src/Main/PythonCode.py";
+                // Crear el proceso
+                ProcessBuilder processBuilder = new ProcessBuilder(command);
+                pythonProcess = processBuilder.start(); // Guardar referencia al proceso
 
-            // Comando para ejecutar el script de Python
-            //String[] command = {"C:/Users/juand/AppData/Local/Microsoft/WindowsApps/python.exe", scriptPath};   //Juanda
-//            String[] command = {"C:/Users/User/AppData/Local/Programs/Python/Python311/python.exe", scriptPath};   //Charly
-            
-            // Crear el proceso
-            //ProcessBuilder processBuilder = new ProcessBuilder(command);
-            //Process process = processBuilder.start();
-            
+                // Leer la salida estándar del script de Python
+                BufferedReader reader = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream()));
+                String line;
+                System.out.println("Salida del script de Python:");
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
 
-//            // Leer la salida estándar del proceso
-//            InputStream inputStream = process.getInputStream();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//
-//            // Leer la salida de error del proceso
-//            InputStream errorStream = process.getErrorStream();
-//            BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+                // Leer la salida de error del script de Python (si existe)
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
+                System.out.println("Errores del script de Python (si los hay):");
+                while ((line = errorReader.readLine()) != null) {
+                    System.err.println(line);
+                }
 
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                System.out.println(line);
-//            }
-//
-//            // Imprimir la salida de error
-//            while ((line = errorReader.readLine()) != null) {
-//                System.err.println(line);
-//            }
+                // Esperar a que el proceso termine
+                int exitCode = pythonProcess.waitFor();
+                System.out.println("El script de Python ha terminado con código de salida: " + exitCode);
 
-            // Esperar a que el proceso termine
-//            int exitCode = process.waitFor();
-//            System.out.println("El script de Python ha terminado con código de salida: " + exitCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
+        pythonThread.setDaemon(true);  // Deja que este hilo se cierre cuando la aplicación JavaFX termine
+        pythonThread.start();  // Inicia el hilo en segundo plano
+
+        // Lanzar la aplicación JavaFX
         launch(args);
     }
 }
