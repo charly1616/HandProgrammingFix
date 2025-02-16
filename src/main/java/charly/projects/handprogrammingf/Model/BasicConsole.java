@@ -27,7 +27,7 @@ public class BasicConsole extends Pane {
     public Controller controll;
     public BasicConsole(){
         VBox bb = new VBox();
-        Label titleLabel = new Label("Charly's console");
+        Label titleLabel = new Label("Console");
         titleLabel.setPrefWidth(this.getPrefWidth());
         titleLabel.setTextFill(Color.rgb(31, 220, 255));
         titleLabel.setFont(new Font(20));

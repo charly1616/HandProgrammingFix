@@ -3,7 +3,6 @@ import mediapipe as mp
 import pyautogui
 import time
 import sys
-import os
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -14,8 +13,7 @@ hands = mp_hands.Hands()
 mouse_control = True
 move_interval = 0.1  # Intervalo de tiempo entre movimientos del mouse (segundos)
 last_move_time = time.time()
-two_fingers_start_time = 0
-two_fingers_duration = 2.0  # Duración para considerar dos dedos levantados como clic izquierdo (segundos)
+dragging = False  # Indicador para saber si estamos arrastrando
 
 try:
     while True:
@@ -60,24 +58,26 @@ try:
                         pyautogui.moveTo(smooth_x, smooth_y)
                         last_move_time = time.time()
 
-                elif fingers_raised == 3:
-                    if mouse_control:
-                        if two_fingers_start_time == 0:
-                            two_fingers_start_time = time.time()
-                        elif time.time() - two_fingers_start_time >= two_fingers_duration:
-                            pyautogui.mouseDown()
-                            mouse_control = False
-                    else:
-                        two_fingers_start_time = 0
                 elif fingers_raised == 2:
-                    mouse_control = True
-                    pyautogui.click()
+                    if not dragging:
+                        pyautogui.mouseDown()  # Mantén presionado el clic izquierdo
+                        dragging = True
+                elif fingers_raised != 2 and dragging:
+                    pyautogui.mouseUp()  # Suelta el clic izquierdo cuando ya no estén 2 dedos levantados
+                    dragging = False
+
                 elif fingers_raised == 4:
                     mouse_control = True
                     pyautogui.scroll(-150)
                 elif fingers_raised == 0:
                     mouse_control = True
                     pyautogui.scroll(150)
+
+                # Quitar el agarre (dragging) cuando se detecten 5 dedos levantados
+                elif fingers_raised == 5:
+                    if dragging:
+                        pyautogui.mouseUp()  # Suelta el clic izquierdo
+                        dragging = False
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -86,5 +86,4 @@ finally:
     if cap.isOpened():
         cap.release()
     cv2.destroyAllWindows()
-    # Finalizar el programa completamente
     sys.exit(0)
